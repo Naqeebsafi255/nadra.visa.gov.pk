@@ -12,28 +12,32 @@ if (isset($_GET['logout'])) {
     exit;
 }
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
-include "config.php";
+include "config.php"; // د PDO نښلول شوی کانفیګ
 
 $search = isset($_GET['search']) ? trim($_GET['search']) : '';
-$where = "WHERE 1=1";
+$sql = "SELECT id, visa_reference_number, full_name, passport_no FROM visa_records1_new WHERE 1=1";
 
 if ($search != '') {
-    $search = mysqli_real_escape_string($conn, $search);
-    $where .= " AND (full_name LIKE '%$search%' 
-                OR visa_reference_number LIKE '%$search%' 
-                OR passport_no LIKE '%$search%')";
+    $sql .= " AND (full_name LIKE :search 
+                OR visa_reference_number LIKE :search 
+                OR passport_no LIKE :search)";
 }
+$sql .= " ORDER BY id DESC";
 
-$query = "SELECT id, visa_reference_number, full_name, passport_no 
-          FROM visa_records1_new
-          $where 
-          ORDER BY id DESC";
-
-$result = mysqli_query($conn, $query);
+try {
+    $stmt = $conn->prepare($sql);
+    if ($search != '') {
+        $stmt->execute(['search' => "%$search%"]);
+    } else {
+        $stmt->execute();
+    }
+    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    die("❌ Error: " . $e->getMessage());
+}
 ?>
 
 <!DOCTYPE html>
@@ -67,7 +71,7 @@ $result = mysqli_query($conn, $query);
             <i class="fa-solid fa-passport text-xl"></i>
             <h1 class="text-lg md:text-xl font-bold">Naqeeb Safi Visa System</h1>
         </div>
-        <a href="admin_dashboard.php?logout=true" class="bg-white/20 hover:bg-white/30 px-3 py-1.5 rounded-lg flex items-center gap-1.5 text-sm transition-all">
+        <a href="admin_dashboard.php?logout=true" class="bg-white/25 hover:bg-white/35 px-3 py-1.5 rounded-lg flex items-center gap-1.5 text-sm transition-all">
             <i class="fa-solid fa-right-from-bracket"></i>
             <span class="hidden sm:inline">Logout</span>
         </a>
@@ -80,7 +84,7 @@ $result = mysqli_query($conn, $query);
     <!-- Top Bar -->
     <div class="bg-white rounded-lg shadow p-4 mb-5">
         <div class="flex flex-col md:flex-row gap-3 justify-between items-stretch md:items-center">
-            <a href="add.php" class="bg-primary hover:bg-primaryDark text-white px-4 py-2 rounded-lg flex items-center gap-2 font-medium transition-all">
+            <a href="add.php" class="bg-primary hover:bg-primaryDark text-white px-4 py-2 rounded-lg flex items-center justify-center gap-2 font-medium transition-all">
                 <i class="fa-solid fa-plus"></i> Add New Visa
             </a>
 
@@ -88,12 +92,12 @@ $result = mysqli_query($conn, $query);
                 <div class="relative flex-1">
                     <i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
                     <input type="text" name="search" placeholder="Search Name, Ref or Passport..."
-                           value="<?php echo htmlspecialchars($search); ?>"
+                           value="<?= htmlspecialchars($search); ?>"
                            class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary/40 focus:border-primary outline-none transition-all">
                 </div>
                 <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-all">Search</button>
                 <?php if ($search): ?>
-                <a href="admin_dashboard.php" class="bg-gray-500 hover:bg-gray-600 text-white px-3 py-2 rounded-lg transition-all">
+                <a href="admin_dashboard.php" class="bg-gray-500 hover:bg-gray-600 text-white px-3 py-2 rounded-lg transition-all flex items-center">
                     <i class="fa-solid fa-xmark"></i>
                 </a>
                 <?php endif; ?>
@@ -107,7 +111,7 @@ $result = mysqli_query($conn, $query);
             <h2 class="text-lg font-semibold flex items-center gap-2">
                 <i class="fa-solid fa-list-check text-primary"></i> Visa Records
             </h2>
-            <span class="text-sm text-gray-500">Total: <strong class="text-primary"><?= mysqli_num_rows($result) ?></strong></span>
+            <span class="text-sm text-gray-500">Total: <strong class="text-primary"><?= count($results) ?></strong></span>
         </div>
 
         <div class="overflow-x-auto">
@@ -122,8 +126,8 @@ $result = mysqli_query($conn, $query);
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
-                    <?php if(mysqli_num_rows($result) > 0): ?>
-                        <?php while($row = mysqli_fetch_assoc($result)): ?>
+                    <?php if(count($results) > 0): ?>
+                        <?php foreach($results as $row): ?>
                         <tr class="hover:bg-gray-50 transition-colors">
                             <td class="p-3 font-medium"><?= $row['id'] ?></td>
                             <td class="p-3 font-mono"><?= htmlspecialchars($row['visa_reference_number']) ?></td>
@@ -147,7 +151,7 @@ $result = mysqli_query($conn, $query);
                                 </div>
                             </td>
                         </tr>
-                        <?php endwhile; ?>
+                        <?php endforeach; ?>
                     <?php else: ?>
                         <tr>
                             <td colspan="5" class="p-8 text-center text-gray-500">
