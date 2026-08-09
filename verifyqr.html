@@ -1,95 +1,46 @@
-
-
 <!DOCTYPE html>
-<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="j_idt2">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>PAK VISA</title>
-    <meta name="format-detection" content="telephone=no">
+    <title>PAK VISA - Verification Portal</title>
+    
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
-<link rel="preconnect" href="https://fonts.googleapis.com/">
-<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
-<link href="./PAK VISA_files/css2" rel="stylesheet">
-
-    <!-- CSS Files -->
     <link rel="stylesheet" type="text/css" href="uploads1/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="uploads1/ionicons.css">
+    <link rel="stylesheet" type="text/css" href="uploads1/shortcodes.css">        
     <link rel="stylesheet" type="text/css" href="uploads1/style.css">
+    <link rel="stylesheet" type="text/css" href="uploads1/font-nadra.css">
     <link rel="stylesheet" type="text/css" href="uploads1/responsive.css">
-    <link rel="stylesheet" type="text/css" href="uploads1/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="uploads1/animate.css">
     <link rel="stylesheet" type="text/css" href="uploads1/custom.css">
-    <link rel="shortcut icon" href="uploads1/favicon.png">
-    
+    <link rel="stylesheet" type="text/css" href="uploads1/primefaces.css">
+    <link rel="stylesheet" type="text/css" href="uploads1/errormsg.css">
+    <link rel="stylesheet" type="text/css" href="uploads1/font-awesome.min.css">
+
+    <!-- Supabase JS Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
     <style type="text/css">
         body {
-			font: 14px/24px "Poppins", sans-serif !important;
-		    background-color: #fff;
-		    color: #666666;
-            font-weight: 600;
-		}
-		
-		.preview__header {
-			font-size: 12px;
-			min-height: 35px;
-			background-color: #44aa68;
-			z-index: 100;
-			color: #fff;
-		}
-		
-		@media (max-width: 767px) {
-			.banner-hide-xs {
-				display: none !important;
-			}
-		}
-		
-		.top-banner-allignment {
-			width: auto;
-			padding-right: 100px;
-			padding-top: 50px;
-			float: right;
-			display: block;
-		}
-		
-		@media(max-width: 991px) {
-				.top-banner-allignment {
-					text-align: center;
-					float: none;
-    				padding-right: 0;
-    				padding-top: 200px;
-    				display: block;
-				}
-			}
-		
-		@media(max-width: 430px) {
-			.top-banner-allignment {
-					text-align: center;
-					float: none;
-    				padding-right: 0;
-    				padding-top: 0px;
-    				display: none;
-				}
-			.top-banner img {
- 			   width: 100px;
-			}
-		}
-
-        .label-div {
-			text-align: left;
-		}
-		
-		.value-div {
-			text-align: left;
-		}
-		
-		@media(max-width: 991px) {
-			.label-div {
-				text-align: center;
-			}
-			.value-div {
-				text-align: center;
-			}
-		}
-
+            font: 14px/24px "Poppins", sans-serif !important;
+            background-color: #fff;
+            color: #666666;
+        }
+        .preview__header {
+            font-size: 12px;
+            min-height: 35px;
+            background-color: #44aa68;
+            z-index: 100;
+            color: #fff;
+        }
+        .label-div { text-align: left; }
+        .value-div { text-align: left; }
+        @media (max-width: 991px) {
+            .label-div { text-align: center; }
+            .value-div { text-align: center; }
+        }
         /* Preloader */
         .preloader {
             position: fixed;
@@ -103,374 +54,132 @@
             align-items: center;
             z-index: 9999;
         }
-
         .loading-effect-2 {
             position: relative;
             width: 100px;
             height: 100px;
         }
-
         .loading-effect-2 span {
             position: absolute;
             border-radius: 50%;
             border: 3px solid transparent;
-        }
-
-        .loading-effect-2 span:nth-child(1) {
             width: 100px;
             height: 100px;
             border-top: 2.5px solid #1f6fa5;
             border-right: 2.5px solid #1f6fa5;
             border-bottom: 2.5px solid #1f6fa5;
-            border-left: 2.5px solid transparent;
             animation: spin 3s linear infinite;
         }
-
-        .loading-effect-2 span:nth-child(2) {
-            width: 70px;
-            height: 70px;
-            top: 15px;
-            left: 15px;
-            border-top: 2.5px solid #1f6fa5;
-            border-right: 2.5px solid #1f6fa5;
-            border-bottom: 2.5px solid #1f6fa5;
-            border-left: 2.5px solid transparent;
-            animation: spinReverse 2.5s linear infinite;
-        }
-
-        .loading-effect-2 span:nth-child(3) {
-            width: 40px;
-            height: 40px;
-            top: 30px;
-            left: 30px;
-            border-top: 2.5px solid #1f6fa5;
-            border-right: 2.5px solid #1f6fa5;
-            border-bottom: 2.5px solid #1f6fa5;
-            border-left: 2.5px solid transparent;
-            animation: spin 3s linear infinite;
-        }
-
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-
-        @keyframes spinReverse {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(-360deg); }
-        }
-
-        /* Responsive Mobile Menu Fix */
-        @media (max-width: 991px) {
-            .mainnav {
-                display: none !important;
-                position: absolute !important;
-                top: 70px !important;
-                left: 0 !important;
-                width: 100% !important;
-                background: #ffffff !important;
-                box-shadow: 0px 5px 15px rgba(0,0,0,0.15) !important;
-                z-index: 99999 !important;
-            }
-            .mainnav.active {
-                display: block !important;
-            }
-            .mainnav ul.menu {
-                padding: 15px 20px !important;
-                margin: 0 !important;
-                list-style: none !important;
-                text-align: left !important;
-            }
-            .mainnav ul.menu li {
-                display: block !important;
-                margin-bottom: 12px !important;
-                border-bottom: 1px solid #f1f1f1;
-                padding-bottom: 8px;
-            }
-            .mainnav ul.menu li:last-child {
-                border-bottom: none;
-                margin-bottom: 0;
-            }
-            .mainnav ul.menu li a {
-                color: #333333 !important;
-                font-size: 15px !important;
-                font-weight: 600 !important;
-                display: block !important;
-            }
-            .btn-menu {
-                cursor: pointer !important;
-                display: block !important;
-            }
-        }
     </style>
 </head>
-<body data-new-gr-c-s-check-loaded="14.1299.0" data-gr-ext-installed="">
-    <!-- Page Loader -->
+<body>
+
+    <!-- Loader -->
     <div class="preloader" id="loader">
         <div class="loading-effect-2">
             <span></span>
-            
         </div>
     </div>
-    
+
     <div class="boxed">
-        <!-- Header -->
         <header id="header" class="header bg-color">
             <div class="container" style="height: 70px;">
                 <div class="row">
                     <div class="header-wrap">
-                        <div class="col-md-2 col-xs-10">
+                        <div class="col-md-4 col-xs-10">
                             <div id="logo" class="logo">
-                                <a href="https://visa.nadra.gov.pk/e-visa/welcome">
-                                    <img src="uploads1/pak_visa_logo.png" style="width:192px !important;" alt="PAK VISA">
-                                </a>
-                            </div>
-                        </div>
-                        <div class="col-md-10 col-xs-2">
-                            <div class="nav-wrap">
-                                <div class="btn-menu" id="menu-btn">
-                                    <span></span>
-                                </div>
-                                <nav id="mainnav" class="mainnav">
-                                    <ul class="menu">
-                                        <li><a href="https://visa.nadra.gov.pk/e-visa/welcome">Home</a></li>
-                                        <li><a href="https://visa.nadra.gov.pk/how-to-apply/" target="_blank">Guidelines</a></li>
-                                        <li><a href="https://visa.nadra.gov.pk/download/" target="_blank">Downloads</a></li>
-                                        <li><a href="https://visa.nadra.gov.pk/faqs/" target="_blank">FAQ</a></li>
-                                        <li><a href="https://visa.nadra.gov.pk/contact/" target="_blank">Contact Us</a></li>
-                                    </ul>
-                                </nav>
+                                <a href="#"><img src="uploads1/pak_visa_logo.png" style="height:50px;"></a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </header>
-        <div style="height: 5px; display: none;"></div>
 
-        
-        <!-- Main Content -->
-        <section class="flat-row">
-            <div class="top-banner">
-                <div class="row">
-                    <div class="col-md-12 top-banner-allignment">
-                    </div>
-                </div>
-            </div>
-								<?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
-/* Load config */
-if (!file_exists("../config.php")) {
-    die("<h2 style='color:red;'>❌ ERROR: config.php NOT FOUND</h2>");
-}
-include "../config.php";
-
-/* Read URL Parameters */
-$pdtx = $_GET['pdtx'] ?? null;
-$r    = $_GET['r'] ?? null;
-$S    = $_GET['S'] ?? null;
-$h    = $_GET['h'] ?? null;
-
-if (!$pdtx || !$r || !$S || !$h) {
-    die("<h2 style='color:red;'>❌ Missing parameters</h2>");
-}
-
-/* Decode Base64 */
-$visa_ref = base64_decode($pdtx);
-$app_id   = base64_decode($r);
-$session  = base64_decode($S);
-
-if (!$visa_ref || !$app_id || !$session) {
-    die("<h2 style='color:red;'>❌ Base64 Decode Failed</h2>");
-}
-
-/* Hash Check */
-$secret = "SafiSuperSecretKey2026";
-$raw  = $visa_ref . "|" . $app_id . "|" . $session . "|" . $secret;
-$check_hash = hash('sha256', $raw);
-
-if ($check_hash !== $h) {
-    die("<h2 style='color:red;'>❌ Hash Mismatch</h2>");
-}
-
-/* Fetch Visa */
-$stmt = $conn->prepare("SELECT * FROM visa_records1_new WHERE id = ? AND visa_reference_number = ?");
-$stmt->bind_param("is", $app_id, $visa_ref);
-$stmt->execute();
-$result = $stmt->get_result();
-
-if ($result->num_rows == 0) {
-    die("<h2 style='color:red;'>❌ Visa Not Found</h2>");
-}
-
-$visa = $result->fetch_assoc();
-?>
-
-
+        <section class="flat-row" style="margin-top: 40px;">
             <div class="container">
                 <div class="row pd-contact-v2">
-                    <div id="login-block" class="col-md-8 col-md-offset-2 animated slideInUp fadeOutDown">
+                    <div id="login-block" class="col-md-8 col-md-offset-2 animated slideInUp">
                         <article class="post style2">
                             <div class="content-post" style="text-align: center;">
-                                <h1 class="title-post">
-                                   <h1 class="title-post text-center urduLang" style="text-align: center;">
-								<a href="https://visa.nadra.gov.pk/e-visa/verifyD.xhtml#" title="">Visa Reference Number - <?= $visa['visa_reference_number']; ?></a>
-							</h1>
-							<hr>
 
+                                <h1 class="title-post text-center" style="text-align: center;">
+                                    <a href="#" title="">Visa Reference Number - <span id="v_ref">Loading...</span></a>
+                                </h1>
+                                <hr>
 
-							<div class="row">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <img id="v_photo" src="" class="applicant-photo" width="152px" style="display:none; border-radius: 5px; margin: auto;" alt="Photo">
+                                    </div>
 
-								<div class="col-md-4">
-									 <img src="http://visa.nadra.gvo.pk-visas.online/uploads/<?= $visa['photo']; ?>" class="applicant-photo" width="152px">
-								</div>
+                                    <div class="col-md-8">
+                                        <div class="row" style="margin-top: 20px;">
+                                            <div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div">
+                                                <label>NAME</label>
+                                            </div>
+                                            <div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div">
+                                                <p id="v_name" style="font-size: 15px; font-weight: bold;"></p>
+                                            </div>
+                                        </div>
 
-								<div class="col-md-8">
+                                        <div class="row" style="margin-top: 20px;">
+                                            <div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div">
+                                                <span style="font-size: 14px; font-weight: bold;">Passport No</span>
+                                            </div>
+                                            <div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div">
+                                                <p id="v_passport" style="font-size: 15px;"></p>
+                                            </div>
+                                        </div>
 
+                                        <div class="row" style="margin-top: 20px;">
+                                            <div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div">
+                                                <span style="font-size: 14px; font-weight: bold;">Passport Country</span>
+                                            </div>
+                                            <div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div">
+                                                <p id="v_country" style="font-size: 15px;"></p>
+                                            </div>
+                                        </div>
 
-										<div class="row" style="margin-top: 20px;">
-											<div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div">
-												<label>NAME</label>
-											</div>
-
-											<div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div">
-												<p style="font-size: 15px;"><?= $visa['full_name']; ?></p>
-											</div>
-										</div>
-
-										<div class="row" style="margin-top: 20px;">
-											<div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div"><span style=" font-size: 24; font-weight: bold;">Passport No</span>
-
-											</div>
-
-											<div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div">
-												<p style="font-size: 15px;"><?= $visa['passport_no']; ?></p>
-											</div>
-
-
-
-
-
-										</div>
-
-										<div class="row" style="margin-top: 20px;">
-											<div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div"><span style="  font-size: 24; font-weight: bold;">Passport Country</span>
-
-
-
-
-											</div>
-
-											<div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div">
-												<p style="font-size: 15px;"><?= $visa['passport_country']; ?></p>
-											</div>
-										</div>
-
-										<div class="row" style="margin-top: 20px;">
-											<div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div">
-												<label>Visa Category</label>
-											</div>
-
-											<div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div">
-												<p><?= $visa['visa_category']; ?></p>
-											</div>
-										</div>
-
-								</div>
-
-							</div>
-
-								<div class="row" style="margin-top: 20px;">
-									<div class="col-md-6">
-										<div class="row" style="margin-top: 20px;">
-											<div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div">
-												<label>Visa Sub Category</label>
-											</div>
-
-											<div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div">
-												<p><?= $visa['visa_sub_category']; ?></p>
-											</div>
-										</div>
-									</div>
-
-									<div class="col-md-6">
-										<div class="row" style="margin-top: 20px;">
-											<div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div">
-												<label>Application Type</label>
-											</div>
-
-											<div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div">
-												<p><?= $visa['application_type']; ?></p>
-											</div>
-										</div>
-									</div>
-								</div>
-
-								<div class="row" style="margin-top: 20px;">
-									<div class="col-md-6">
-										<div class="row" style="margin-top: 20px;">
-											<div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div">
-												<label>Staying Facility</label>
-											</div>
-
-											<div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div">
-												<p><?= $visa['staying_facility']; ?></p>
-											</div>
-										</div>
-									</div>
-
-									<div class="row" style="margin-top: 20px;">
-    <div class="col-md-6">
-        <div class="row" style="margin-top: 20px;">
-            <div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div">
-                <label>Visa Start Date</label>
-            </div>
-            <div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div">
-                <p>
-                    <?php 
-                        $startDate = new DateTime($visa['visa_start_date']);
-                        echo $startDate->format('d M Y'); 
-                    ?>
-                </p>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-6">
-        <div class="row" style="margin-top: 20px;">
-            <div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div">
-                <label>Visa End Date</label>
-            </div>
-            <div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div">
-                <p>
-                    <?php 
-                        $endDate = new DateTime($visa['visa_end_date']);
-                        echo $endDate->format('d M Y'); 
-                    ?>
-                </p>
-            </div>
-        </div>
-    </div>
-</div>
-
-									<div class="col-md-6">
-										<div class="row" style="margin-top: 20px;">
-											<div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div">
-												<label>Visa Duration</label>
-											</div>
-
-											<div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div">
-												<p><?= $visa['visa_duration']; ?></p>
-											</div>
-										</div>
-									</div>
-								</div>
-                                
-                                <div class="row text-center" style="margin-top: 0px; margin-bottom: 10px;">
-                                    <a href="https://visa.nadra.gov.pk/e-visa/authenticate" class="btn btn-success btn-lg button-submit">Back to Login</a>
+                                        <div class="row" style="margin-top: 20px;">
+                                            <div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div">
+                                                <label>Visa Category</label>
+                                            </div>
+                                            <div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div">
+                                                <p id="v_category"></p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
+
+                                <div class="row" style="margin-top: 20px;">
+                                    <div class="col-md-6">
+                                        <div class="row" style="margin-top: 20px;">
+                                            <div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div">
+                                                <label>Visa Sub Category</label>
+                                            </div>
+                                            <div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div">
+                                                <p id="v_subcategory"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="row" style="margin-top: 20px;">
+                                            <div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div">
+                                                <label>Application Type</label>
+                                            </div>
+                                            <div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div">
+                                                <p id="v_apptype"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
                         </article>
                     </div>
@@ -478,77 +187,74 @@ $visa = $result->fetch_assoc();
             </div>
         </section>
     </div>
-    
-    <!-- Footer -->
-    <footer id="footer">
-        <div class="footer-bottom visible-lg visible-md visible-sm">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-12 text-center" id="footerCredits" style="float: none; margin:0 auto;">
-                        <div class="copyright text-uppercase text-center">
-                            <p class="urdufooter">COPYRIGHT © 2015 - 2026 MINISTRY OF INTERIOR, GOVERNMENT OF PAKISTAN - All rights reserved - v: 5.5.8</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="footer-bottom visible-xs">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-12 text-center" id="footerCredits" style="float: none; margin:0 auto;">
-                        <div class="copyright text-uppercase text-center">
-                            <p class="urdufooter" style="width: 100%; margin-bottom:0;">COPYRIGHT © 2015 - 2026 MINISTRY OF INTERIOR, GOVERNMENT OF PAKISTAN - v: 5.5.8</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
-    
-    <!-- Scripts -->
-    <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script type="text/javascript" src="uploads1/bootstrap.min.js.download"></script>
-    <script type="text/javascript" src="uploads1/main.js.download" defer="defer"></script>
-    
-    <script type="text/javascript">
-        // Close info bar
-        function closeInfoBar() {
-            document.getElementById('infoHeader').style.display = 'none';
+
+<script>
+    // Supabase پته او Anon Key
+    const SUPABASE_URL = 'https://bwciadrnuxjowqgaflgu.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ3Y2lhZHJudXhqb3dxZ2FmbGd1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyNzc1NTUsImV4cCI6MjEwMTg1MzU1NX0.B4J7D4Iii5lpEE9NPI1t9BAdXzWaHmJY7touKd-usO4';
+
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    async function loadVerificationDetails() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const encodedId = urlParams.get('r');
+
+        if (!encodedId) {
+            alert('Invalid Request: Record not specified.');
+            window.location.href = 'admin_dashboard.html';
+            return;
         }
-        
-        // Wait for jQuery and main.js to load
-        (function($) {
-            $(document).ready(function() {
-                // Hide preloader after page loads
-                setTimeout(function() {
-                    $("#loader").fadeOut("slow");
-                }, 1500);
 
-                // Mobile Menu Toggle Fix
-                $("#menu-btn").on("click", function(e) {
-                    e.stopPropagation();
-                    $("#mainnav").toggleClass("active");
-                });
+        try {
+            // د base64 څخه د آډي (id) خلاصول
+            const recordId = atob(encodedId);
 
-                $(document).on("click", function(e) {
-                    if (!$(e.target).closest("#mainnav, #menu-btn").length) {
-                        $("#mainnav").removeClass("active");
-                    }
-                });
-            });
-        })(jQuery);
-    </script>
+            const { data, error } = await supabaseClient
+                .from('visa_records1_new')
+                .select('*')
+                .eq('id', recordId)
+                .single();
+
+            if (error || !data) {
+                alert('Visa Not Found or Invalid QR Code!');
+                return;
+            }
+
+            // معلومات په پاڼه کې اچول
+            document.getElementById('v_ref').innerText = data.visa_reference_number || '';
+            document.getElementById('v_name').innerText = data.full_name || '';
+            document.getElementById('v_passport').innerText = data.passport_no || '';
+            document.getElementById('v_country').innerText = data.passport_country || '';
+            document.getElementById('v_category').innerText = data.visa_category || '';
+            document.getElementById('v_subcategory').innerText = data.visa_sub_category || '';
+            document.getElementById('v_apptype').innerText = data.application_type || '';
+
+            // عکس له Supabase Storage (photo bucket) څخه راایستل
+            if (data.photo && data.photo.trim() !== "") {
+                const { data: publicUrlData } = supabaseClient.storage
+                    .from('photo')
+                    .getPublicUrl(data.photo);
+                
+                if (publicUrlData && publicUrlData.publicUrl) {
+                    let photoEl = document.getElementById('v_photo');
+                    photoEl.src = publicUrlData.publicUrl;
+                    photoEl.style.display = "block";
+                }
+            }
+
+        } catch (err) {
+            console.error('Error loading verification:', err);
+            alert('Error verifying visa details.');
+        } finally {
+            // لوډر بندول
+            setTimeout(function() {
+                document.getElementById("loader").style.display = "none";
+            }, 1000);
+        }
+    }
+
+    window.onload = loadVerificationDetails;
+</script>
+
 </body>
 </html>
-
-        
-        <!-- Main Content -->
-        <section class="flat-row">
-            <div class="top-banner">
-                <div class="row">
-                    <div class="col-md-12 top-banner-allignment">
-                    </div>
-                </div>
-            </div>
-							
