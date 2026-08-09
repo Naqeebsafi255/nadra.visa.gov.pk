@@ -1,0 +1,9 @@
+
+@font-face{font-family:'FontNadra';src:url('../fonts/NADRANastaleeq.ttf');}
+
+.nadra-font{
+	font-family: FontNadra;
+	width: 135px;
+	text-align: left;
+	font-size: 20px;
+}
