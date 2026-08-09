@@ -1,106 +1,12 @@
-<?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-?>
-<?php
-session_start();
-if (!isset($_SESSION['admin']) || $_SESSION['admin'] !== "admin") {
-    header("Location: admin_login.php");
-    exit;
-}
-
-include "config.php";
-
-$message = "";
-
-// د اتوماتیک ریفرنس نمبر جوړولو فنکشن
-function generateReferenceNumber($conn) {
-    do {
-        $ref = "8800" . mt_rand(1000000, 9999999);
-        
-        $stmt = mysqli_prepare($conn, "SELECT id FROM visa_records1_new WHERE visa_reference_number = ?");
-        mysqli_stmt_bind_param($stmt, "s", $ref);
-        mysqli_stmt_execute($stmt);
-        mysqli_stmt_store_result($stmt);
-        $count = mysqli_stmt_num_rows($stmt);
-        mysqli_stmt_close($stmt);
-        
-    } while ($count > 0);
-    
-    return $ref;
-}
-
-// د اتوماتیک نمبر تولیدول (که فورم تازه شي یا سیمیټ شي)
-$auto_ref = generateReferenceNumber($conn);
-
-if(isset($_POST['submit'])){
-
-    // که اډمین په لاسي ډول بل څه ولیکل، همغه اخلو، که نه نو همدغه اتوماتیک نمبر
-    $ref      = trim($_POST['visa_reference_number'] ?? '');
-    if(empty($ref)){
-        $ref = $auto_ref;
-    }
-
-    $name     = trim($_POST['full_name'] ?? '');
-    $dob      = $_POST['dob'] ?? '';
-    $passport = trim($_POST['passport_no'] ?? '');
-    $country  = trim($_POST['passport_country'] ?? '');
-    $nation   = trim($_POST['nationality'] ?? '');
-    $cat      = trim($_POST['visa_category'] ?? '');
-    $subcat   = trim($_POST['visa_sub_category'] ?? '');
-    $type     = trim($_POST['application_type'] ?? '');
-    $grant    = $_POST['visa_grant_date'] ?? '';
-    $stay     = trim($_POST['staying_facility'] ?? '');
-    $start    = $_POST['visa_start_date'] ?? '';
-    $end      = $_POST['visa_end_date'] ?? '';
-    $duration = trim($_POST['visa_duration'] ?? '');
-    $status   = trim($_POST['status'] ?? '');
-    $appdate  = $_POST['application_date'] ?? '';
-    $sex      = trim($_POST['sex'] ?? '');
-
-    $photo_name = "";
-    if(isset($_FILES['photo']['name']) && $_FILES['photo']['name'] != ""){
-        $allowed = ['jpg', 'jpeg', 'png'];
-        $ext = pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION);
-        if(in_array(strtolower($ext), $allowed)){
-            $photo_name = time() . "_" . uniqid() . "." . $ext;
-            $target = "uploads/" . $photo_name;
-            if(!is_dir("uploads")) mkdir("uploads", 0777, true);
-            move_uploaded_file($_FILES['photo']['tmp_name'], $target);
-        }
-    }
-
-    if(empty($ref) || empty($name) || empty($dob) || empty($passport) || empty($country) || empty($nation) || empty($cat) || empty($subcat) || empty($type) || empty($status) || empty($appdate) || empty($stay)) {
-        $message = "<div class='bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4'>❌ Please fill all required fields!</div>";
-    } else {
-        $stmt = mysqli_prepare($conn, "INSERT INTO visa_records1_new (
-            visa_reference_number, full_name, dob, passport_no, 
-            passport_country, nationality, visa_category, visa_sub_category, 
-            application_type, visa_grant_date, staying_facility, visa_start_date, 
-            visa_end_date, visa_duration, photo, status, application_date, sex
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-
-        mysqli_stmt_bind_param($stmt, "ssssssssssssssssss",
-            $ref, $name, $dob, $passport, $country, $nation, $cat, $subcat, $type,
-            $grant, $stay, $start, $end, $duration, $photo_name, $status, $appdate, $sex
-        );
-
-        if(mysqli_stmt_execute($stmt)){
-            $message = "<div class='bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4'>✔ New Visa Record Added Successfully!</div>";
-            $auto_ref = generateReferenceNumber($conn);
-        } else {
-            $message = "<div class='bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4'>❌ Error: " . mysqli_error($conn) . "</div>";
-        }
-    }
-}
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Add New Visa | Nader System</title>
+<title>Add New Visa | Naqeeb System</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="https://cdn.tailwindcss.com"></script>
+<!-- Supabase JS Client -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
 <style>
     body { font-size: 15px; }
@@ -138,14 +44,14 @@ tailwind.config = {
             <h2 class="text-2xl font-bold text-primary flex items-center gap-2">
                 <i class="fa fa-user-plus"></i> Add New Visa Record
             </h2>
-            <a href="admin_dashboard.php" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2">
+            <a href="admin_dashboard.html" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2">
                 <i class="fa fa-arrow-left"></i> Back
             </a>
         </div>
 
-        <?php if($message != "") echo $message; ?>
+        <div id="message-container"></div>
 
-        <form method="POST" enctype="multipart/form-data" class="space-y-6">
+        <form id="addVisaForm" onsubmit="submitVisaForm(event)" class="space-y-6">
 
             <!-- REFERENCE & NAME -->
             <div>
@@ -153,12 +59,12 @@ tailwind.config = {
                 <div class="grid md:grid-cols-2 gap-4">
                     <div>
                         <label class="block mb-1">Reference Number (Auto / Editable) <span class="text-red-500">*</span></label>
-                        <input type="text" name="visa_reference_number" value="<?= htmlspecialchars($auto_ref) ?>" required
+                        <input type="text" id="visa_reference_number" required
                                class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg outline-none focus:border-primary font-bold text-lg text-primary" placeholder="Enter or keep auto reference">
                     </div>
                     <div>
                         <label class="block mb-1">Full Name <span class="text-red-500">*</span></label>
-                        <input type="text" name="full_name" placeholder="Full Name as in Passport" required
+                        <input type="text" id="full_name" placeholder="Full Name as in Passport" required
                                class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg outline-none focus:border-primary">
                     </div>
                 </div>
@@ -170,17 +76,17 @@ tailwind.config = {
                 <div class="grid md:grid-cols-3 gap-4">
                     <div>
                         <label class="block mb-1">Passport No <span class="text-red-500">*</span></label>
-                        <input type="text" name="passport_no" placeholder="Passport Number" required
+                        <input type="text" id="passport_no" placeholder="Passport Number" required
                                class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg outline-none focus:border-primary">
                     </div>
                     <div>
                         <label class="block mb-1">Passport Country <span class="text-red-500">*</span></label>
-                        <input type="text" name="passport_country" placeholder="e.g. Afghanistan" required
+                        <input type="text" id="passport_country" placeholder="e.g. Afghanistan" required
                                class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg outline-none focus:border-primary">
                     </div>
                     <div>
                         <label class="block mb-1">Nationality <span class="text-red-500">*</span></label>
-                        <input type="text" name="nationality" placeholder="e.g. Afghan" required
+                        <input type="text" id="nationality" placeholder="e.g. Afghan" required
                                class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg outline-none focus:border-primary">
                     </div>
                 </div>
@@ -192,7 +98,7 @@ tailwind.config = {
                 <div class="grid md:grid-cols-2 gap-4">
                     <div>
                         <label class="block mb-1">Date of Birth <span class="text-red-500">*</span></label>
-                        <input type="date" name="dob" required
+                        <input type="date" id="dob" required
                                class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg outline-none focus:border-primary">
                     </div>
                     <div>
@@ -221,7 +127,7 @@ tailwind.config = {
                 <div class="grid md:grid-cols-2 gap-4">
                     <div>
                         <label class="block mb-1">Visa Category <span class="text-red-500">*</span></label>
-                        <select name="visa_category" required class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg outline-none focus:border-primary">
+                        <select id="visa_category" required class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg outline-none focus:border-primary">
                             <option value="">-- Select Category --</option>
                             <option value="Tourist/Visa">Tourist/Visit</option>
                             <option value="Business">Business</option>
@@ -236,7 +142,7 @@ tailwind.config = {
                     </div>
                     <div>
                         <label class="block mb-1">Visa Sub Category <span class="text-red-500">*</span></label>
-                        <select name="visa_sub_category" required class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg outline-none focus:border-primary">
+                        <select id="visa_sub_category" required class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg outline-none focus:border-primary">
                             <option value="">-- Select Sub Category --</option>
                             <option value="Individual (less Than 3 Months)">Individual (less Than 3 Months)</option>
                             <option value="Individual">Individual</option>
@@ -257,7 +163,7 @@ tailwind.config = {
                 <div class="grid md:grid-cols-3 gap-4">
                     <div>
                         <label class="block mb-1">Application Type <span class="text-red-500">*</span></label>
-                        <select name="application_type" required class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg outline-none focus:border-primary">
+                        <select id="application_type" required class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg outline-none focus:border-primary">
                             <option value="">-- Select Type --</option>
                             <option value="Entry">Entry</option>
                             <option value="Extension">Extension</option>
@@ -266,12 +172,12 @@ tailwind.config = {
                     </div>
                     <div>
                         <label class="block mb-1">Application Date <span class="text-red-500">*</span></label>
-                        <input type="date" name="application_date" required
+                        <input type="date" id="application_date" required
                                class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg outline-none focus:border-primary">
                     </div>
                     <div>
                         <label class="block mb-1">Visa Grant Date</label>
-                        <input type="date" name="visa_grant_date"
+                        <input type="date" id="visa_grant_date"
                                class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg outline-none focus:border-primary">
                     </div>
                 </div>
@@ -283,17 +189,17 @@ tailwind.config = {
                 <div class="grid md:grid-cols-3 gap-4">
                     <div>
                         <label class="block mb-1">Start Date</label>
-                        <input type="date" name="visa_start_date"
+                        <input type="date" id="visa_start_date"
                                class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg outline-none focus:border-primary">
                     </div>
                     <div>
                         <label class="block mb-1">End Date</label>
-                        <input type="date" name="visa_end_date"
+                        <input type="date" id="visa_end_date"
                                class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg outline-none focus:border-primary">
                     </div>
                     <div>
                         <label class="block mb-1">Duration</label>
-                        <input type="text" name="visa_duration" placeholder="e.g. 30 Days / 1 Year"
+                        <input type="text" id="visa_duration" placeholder="e.g. 30 Days / 1 Year"
                                class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg outline-none focus:border-primary">
                     </div>
                 </div>
@@ -305,7 +211,7 @@ tailwind.config = {
                 <div class="grid md:grid-cols-3 gap-4">
                     <div>
                         <label class="block mb-1">Status <span class="text-red-500">*</span></label>
-                        <select name="status" required class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg outline-none focus:border-primary">
+                        <select id="status" required class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg outline-none focus:border-primary">
                             <option value="Pending">Pending</option>
                             <option value="Approved">Approved</option>
                             <option value="Rejected">Rejected</option>
@@ -313,33 +219,108 @@ tailwind.config = {
                     </div>
                     <div>
                         <label class="block mb-1">Stay / Facility <span class="text-red-500">*</span></label>
-                        <select name="staying_facility" required class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg outline-none focus:border-primary">
+                        <select id="staying_facility" required class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg outline-none focus:border-primary">
                             <option value="">-- Select Option --</option>
                             <option value="Single Entry">Single Entry</option>
                             <option value="Multiple Entry - Upto 1 Year">Multiple Entry - Upto 1 Year</option>
                         </select>
                     </div>
                     <div>
-                        <label class="block mb-1">Upload Photo</label>
-                        <input type="file" name="photo" accept="image/*"
+                        <label class="block mb-1">Upload Photo (Optional)</label>
+                        <input type="file" id="photo" accept="image/*"
                                class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg outline-none">
                     </div>
                 </div>
             </div>
 
-            <button type="submit" name="submit"
-                    class="w-full bg-primary hover:bg-green-800 text-white font-bold py-3 rounded-lg transition text-lg flex items-center justify-center gap-2">
+            <button type="submit"
+                    class="w-full bg-primary hover:bg-green-800 text-white font-bold py-3 rounded-lg transition text-lg flex items-center justify-center gap-2 cursor-pointer">
                 <i class="fa fa-plus-circle"></i> Save New Visa Record
             </button>
 
         </form>
 
         <br>
-        <a href="admin_dashboard.php" class="text-sm font-medium text-primary hover:underline">
+        <a href="admin_dashboard.html" class="text-sm font-medium text-primary hover:underline">
             ⬅ Back to Dashboard
         </a>
     </div>
 </div>
+
+<script>
+    // خپل د Supabase پته او Anon Key دلته ولیکئ
+    const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+    const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // د اتوماتیک ریفرنس نمبر جوړول
+    function generateAutoRef() {
+        const randomNum = Math.floor(1000000 + Math.random() * 9000000);
+        document.getElementById('visa_reference_number').value = "8800" + randomNum;
+    }
+
+    window.onload = generateAutoRef;
+
+    // د فورم د لېږلو او ډاتابیس ته د سیو کولو فنکشن
+    async function submitVisaForm(event) {
+        event.preventDefault();
+
+        let ref = document.getElementById('visa_reference_number').value.trim();
+        let name = document.getElementById('full_name').value.trim();
+        let dob = document.getElementById('dob').value;
+        let passport = document.getElementById('passport_no').value.trim();
+        let country = document.getElementById('passport_country').value.trim();
+        let nation = document.getElementById('nationality').value.trim();
+        let cat = document.getElementById('visa_category').value;
+        let subcat = document.getElementById('visa_sub_category').value;
+        let type = document.getElementById('application_type').value;
+        let grant = document.getElementById('visa_grant_date').value || null;
+        let stay = document.getElementById('staying_facility').value;
+        let start = document.getElementById('visa_start_date').value || null;
+        let end = document.getElementById('visa_end_date').value || null;
+        let duration = document.getElementById('visa_duration').value.trim();
+        let status = document.getElementById('status').value;
+        let appdate = document.getElementById('application_date').value;
+        let sex = document.querySelector('input[name="sex"]:checked').value;
+
+        let messageContainer = document.getElementById('message-container');
+
+        // ډاتابیس ته د معلوماتو استول
+        const { data, error } = await supabaseClient
+            .from('visa_records1_new')
+            .insert([
+                {
+                    visa_reference_number: ref,
+                    full_name: name,
+                    dob: dob,
+                    passport_no: passport,
+                    passport_country: country,
+                    nationality: nation,
+                    visa_category: cat,
+                    visa_sub_category: subcat,
+                    application_type: type,
+                    visa_grant_date: grant,
+                    staying_facility: stay,
+                    visa_start_date: start,
+                    visa_end_date: end,
+                    visa_duration: duration,
+                    status: status,
+                    application_date: appdate,
+                    sex: sex
+                }
+            ]);
+
+        if (error) {
+            messageContainer.innerHTML = `<div class='bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4'>❌ Error: ${error.message}</div>`;
+        } else {
+            messageContainer.innerHTML = `<div class='bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4'>✔ New Visa Record Added Successfully!</div>`;
+            document.getElementById('addVisaForm').reset();
+            generateAutoRef(); // نوی اتوماتیک نمبر جوړول
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }
+</script>
 
 </body>
 </html>
