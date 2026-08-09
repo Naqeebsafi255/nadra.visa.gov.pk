@@ -69,8 +69,8 @@ function handleLogin(event) {
 
     // ثابت اډمین چک کول
     if (user === "admin" && pass === "admin123") {
-        // د بریالیتوب په صورت کې ډیشبورډ ته تګ
-        window.location.href = "admin_dashboard.html";
+        // دلته د ډیشبورډ سم فایل نوم ورکړ شو
+        window.location.href = "admin_dashboard.php";
     } else {
         errorBox.innerText = "❌ غلط Username یا Password!";
     }
