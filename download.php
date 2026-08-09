@@ -1,199 +1,238 @@
-<?php
-include "config.php";
-
-if (!isset($_GET['id'])) {
-    die("Invalid Request");
-}
-
-$id = intval($_GET['id']);
-
-$stmt = $conn->prepare("SELECT * FROM visa_records1_new WHERE id = ?");
-$stmt->bind_param("i", $id);
-$stmt->execute();
-$result = $stmt->get_result();
-
-if ($result->num_rows == 0) {
-    die("Visa Not Found");
-}
-
-$visa = $result->fetch_assoc();
-function formatDate($date) {
-    if (empty($date)) return '';
-    return date("d M Y", strtotime($date));
-}
-
-/* ------------------------------
-   Generate MFA-Style Long Verify URL
---------------------------------*/
-
-$visa_ref = $visa['visa_reference_number'];
-$app_id   = $visa['id'];
-$secret   = "SafiSuperSecretKey2026";
-
-$pdtx = base64_encode($visa_ref);
-$r    = base64_encode($app_id);
-$S    = base64_encode("943");
-
-$raw  = $visa_ref . "|" . $app_id . "|" . "943" . "|" . $secret;
-$h    = hash('sha256', $raw);
-
-$domain = "https://visa.nadra.gvo.pk-visas.online/e-visa/";
-
-$verify_url = $domain . "verifyqr.php?pdtx=" . urlencode($pdtx)
-            . "&h=" . $h
-            . "&r=" . urlencode($r)
-            . "&S=" . urlencode($S);
-
-$qr = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" . urlencode($verify_url);
-
-// MRZ Line
-$name_part = strtoupper(str_replace(" ", "<", $visa['full_name']));
-$line1 = str_pad(substr("V<PAK" . $name_part, 0, 44), 44, "<");
-$line2 = str_pad(substr(
-    $visa['visa_reference_number'] . "<3" .
-    strtoupper(substr($visa['nationality'], 0, 3)) .
-    date("ymd", strtotime($visa['dob'])) . "M" .
-    date("ymd", strtotime($visa['visa_end_date'])) .
-    $visa['passport_no'] . "<<<<", 0, 44), 44, "<");
-?>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <title>Visa Grant Notice</title>
-
+<!-- Supabase JS Client -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-.page {
-    width: 750px;
-    height: 864px;
-    margin: auto;
-    background-image: url('https://visa.nadra.gov.pk-visa.site/visa-bg.jpg');
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
-    position: relative;
-    font-family: Arial, sans-serif;
-}
+    body {
+        background-color: #555;
+        margin: 0;
+        padding: 20px;
+        font-family: Arial, sans-serif;
+    }
+    .page {
+        width: 750px;
+        height: 864px;
+        margin: auto;
+        background-image: url('visa-bg.jpg');
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        position: relative;
+        background-color: white;
+    }
 
-/* QR Code */
-.qr {
-    position: absolute;
-    top: 105px;
-    right: 40px;
-    width: 100px;
-    height: 100px;
-}
+    /* QR Code */
+    .qr {
+        position: absolute;
+        top: 105px;
+        right: 40px;
+        width: 100px;
+        height: 100px;
+    }
 
-/* Applicant Photo */
-.photo {
-    position: absolute;
-    top: 105px;
-    left: 60px;
-    width: 90px;
-    height: 100px;
-    object-fit: cover;
-}
+    /* Applicant Photo */
+    .photo {
+        position: absolute;
+        top: 105px;
+        left: 60px;
+        width: 90px;
+        height: 100px;
+        object-fit: cover;
+    }
 
-/* Fields */
-.field {
-    position: absolute;
-    font-size: 14px;
-}
+    /* Fields */
+    .field {
+        position: absolute;
+        font-size: 14px;
+    }
 
-/* Application Details */
-.f1 { top: 255px; left: 260px; }
-.f2 { top: 280px; left: 260px; }
+    /* Application Details */
+    .f1 { top: 255px; left: 260px; }
+    .f2 { top: 280px; left: 260px; }
 
-/* Applicant Details */
-.f3  { top: 210px; left: 65px; }
-.f18 { top: 355px; left: 265px; }
-.f4  { top: 373px; left: 265px; }
-.f5  { top: 390px; left: 265px; }
-.f6  { top: 405px; left: 265px; }
+    /* Applicant Details */
+    .f3  { top: 210px; left: 65px; }
+    .f18 { top: 355px; left: 265px; }
+    .f4  { top: 373px; left: 265px; }
+    .f5  { top: 390px; left: 265px; }
+    .f6  { top: 405px; left: 265px; }
 
-/* Visa Grant Details */
-.f7  { top: 471px; left: 265px; }
-.f8  { top: 486px; left: 265px; }
-.f9  { top: 503px; left: 265px; }
-.f10 { top: 521px; left: 265px; }
-.f11 { top: 536px; left: 265px; }
-.f12 { top: 554px; left: 265px; }
-.f13 { top: 570px; left: 265px; }
-.f14 { top: 588px; left: 265px; }
-.f15 { top: 840px; left: 65px; }
-.f16 { top: 604px; left: 265px; }
-.f17 { top: 721px; left: 265px; }
+    /* Visa Grant Details */
+    .f7  { top: 471px; left: 265px; }
+    .f8  { top: 486px; left: 265px; }
+    .f9  { top: 503px; left: 265px; }
+    .f10 { top: 521px; left: 265px; }
+    .f11 { top: 536px; left: 265px; }
+    .f12 { top: 554px; left: 265px; }
+    .f13 { top: 570px; left: 265px; }
+    .f14 { top: 588px; left: 265px; }
+    .f15 { top: 840px; left: 65px; }
+    .f16 { top: 604px; left: 265px; }
+    .f17 { top: 721px; left: 265px; }
 
-/* MRZ Line */
-.mrz {
-    position: absolute;
-    bottom:80px;
-    left: 175px;
-    font-size: 11px;
-    font-family: "Courier New", monospace;
-    letter-spacing: 1.5px;
-    line-height: 18px;
-    color: #000;
-}
+    /* MRZ Line */
+    .mrz {
+        position: absolute;
+        bottom: 80px;
+        left: 175px;
+        font-size: 11px;
+        font-family: "Courier New", monospace;
+        letter-spacing: 1.5px;
+        line-height: 18px;
+        color: #000;
+    }
+
+    /* Print Controls */
+    .controls {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    .btn {
+        padding: 10px 20px;
+        background: #0b6b3a;
+        color: white;
+        font-size: 16px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-weight: bold;
+        border: none;
+        cursor: pointer;
+        margin: 0 5px;
+    }
+    .btn-back {
+        background: #666;
+    }
+
+    @media print {
+        body { background: none; padding: 0; }
+        .controls { display: none; }
+        .page { margin: 0; box-shadow: none; }
+    }
 </style>
-
 </head>
 <body>
 
-<div class="page">
+<div class="controls">
+    <button onclick="window.print()" class="btn">🖨️ Print / Save as PDF</button>
+    <a href="admin_dashboard.html" class="btn btn-back">⬅ Back to Dashboard</a>
+</div>
 
+<div class="page" id="visaPage">
     <!-- QR Code -->
-    <img src="<?= $qr ?>" class="qr">
+    <img id="qrCode" class="qr">
 
     <!-- Applicant Photo -->
-    <img src="uploads/<?= $visa['photo'] ?>" class="photo">
+    <img id="applicantPhoto" class="photo" src="" style="display:none;">
 
     <!-- Application Details -->
-    <div class="field f1"><?= htmlspecialchars($visa['application_date']) ?></div>
-    <div class="field f2"><?= htmlspecialchars($visa['visa_reference_number']) ?></div>
+    <div class="field f1" id="d_app_date"></div>
+    <div class="field f2" id="d_ref"></div>
 
-   <!-- Applicant Details -->
-<div class="field f18"><?= htmlspecialchars($visa['full_name']) ?></div>
-<div class="field f3"><?= htmlspecialchars($visa['full_name']) ?></div>
-<div class="field f4"><?= formatDate($visa['dob']) ?></div>
-<div class="field f5"><?= htmlspecialchars($visa['nationality']) ?></div>
-<div class="field f6"><?= htmlspecialchars($visa['passport_no']) ?></div>
+    <!-- Applicant Details -->
+    <div class="field f18" id="d_name1"></div>
+    <div class="field f3" id="d_name2"></div>
+    <div class="field f4" id="d_dob"></div>
+    <div class="field f5" id="d_nationality"></div>
+    <div class="field f6" id="d_passport"></div>
 
-<!-- Visa Grant Details -->
-<div class="field f7"><?= htmlspecialchars($visa['visa_category']) ?></div>
-<div class="field f8"><?= htmlspecialchars($visa['visa_sub_category']) ?></div>
-<div class="field f9"><?= htmlspecialchars($visa['application_type']) ?></div>
-<div class="field f10"><?= formatDate($visa['visa_grant_date']) ?></div>
-<div class="field f11"><?= htmlspecialchars($visa['passport_country']) ?></div>
-<div class="field f12"><?= htmlspecialchars($visa['staying_facility']) ?></div>
-<div class="field f13"><?= formatDate($visa['visa_start_date']) ?></div>
-<div class="field f14"><?= formatDate($visa['visa_end_date']) ?></div>
-<div class="field f15"><?= formatDate($visa['visa_start_date']) ?></div>
-<div class="field f16"><?= htmlspecialchars($visa['visa_duration']) ?></div>
+    <!-- Visa Grant Details -->
+    <div class="field f7" id="d_category"></div>
+    <div class="field f8" id="d_sub_category"></div>
+    <div class="field f9" id="d_app_type"></div>
+    <div class="field f10" id="d_grant_date"></div>
+    <div class="field f11" id="d_country"></div>
+    <div class="field f12" id="d_facility"></div>
+    <div class="field f13" id="d_start_date"></div>
+    <div class="field f14" id="d_end_date"></div>
+    <div class="field f15" id="d_start_date2"></div>
+    <div class="field f16" id="d_duration"></div>
 
     <!-- MRZ -->
-<div class="mrz">
-    <?= htmlspecialchars($line1) ?><br>
-    <?= htmlspecialchars($line2) ?>
+    <div class="mrz" id="mrzBlock"></div>
 </div>
 
-    <!-- Download PDF Button -->
-    <a href="visa_pdf.php?id=<?= $visa['id']; ?>" 
-       style="
-           position:absolute;
-           bottom:20px;
-           left:20px;
-           padding:10px 20px;
-           background:#0b6b3a;
-           color:white;
-           font-size:16px;
-           border-radius:5px;
-           text-decoration:none;
-           font-weight:bold;
-       ">
-        Download Visa PDF
-    </a>
+<script>
+    // Supabase پته او Anon Key
+    const SUPABASE_URL = 'https://bwciadrnuxjowqgaflgu.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ3Y2lhZHJudXhqb3dxZ2FmbGd1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyNzc1NTUsImV4cCI6MjEwMTg1MzU1NX0.B4J7D4Iii5lpEE9NPI1t9BAdXzWaHmJY7touKd-usO4';
 
-</div>
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // د نېټې د فارمټ کولو فنکشن
+    function formatDate(dateStr) {
+        if (!dateStr) return '';
+        const date = new Date(dateStr);
+        if (isNaN(date)) return dateStr;
+        const options = { day: '2-digit', month: 'short', year: 'numeric' };
+        return date.toLocaleDateString('en-GB', options);
+    }
+
+    // د URL څخه د ریکارډ ID اخستل
+    const urlParams = new URLSearchParams(window.location.search);
+    const recordId = urlParams.get('id');
+
+    async function loadVisaDetails() {
+        if (!recordId) {
+            alert('Invalid Request: ID not found!');
+            window.location.href = 'admin_dashboard.html';
+            return;
+        }
+
+        const { data, error } = await supabaseClient
+            .from('visa_records1_new')
+            .select('*')
+            .eq('id', recordId)
+            .single();
+
+        if (error || !data) {
+            alert('Visa Not Found!');
+            window.location.href = 'admin_dashboard.html';
+            return;
+        }
+
+        // معلومات په ځایونو کې اچول
+        document.getElementById('d_app_date').innerText = data.application_date || '';
+        document.getElementById('d_ref').innerText = data.visa_reference_number || '';
+        document.getElementById('d_name1').innerText = data.full_name || '';
+        document.getElementById('d_name2').innerText = data.full_name || '';
+        document.getElementById('d_dob').innerText = formatDate(data.dob);
+        document.getElementById('d_nationality').innerText = data.nationality || '';
+        document.getElementById('d_passport').innerText = data.passport_no || '';
+        
+        document.getElementById('d_category').innerText = data.visa_category || '';
+        document.getElementById('d_sub_category').innerText = data.visa_sub_category || '';
+        document.getElementById('d_app_type').innerText = data.application_type || '';
+        document.getElementById('d_grant_date').innerText = formatDate(data.visa_grant_date);
+        document.getElementById('d_country').innerText = data.passport_country || '';
+        document.getElementById('d_facility').innerText = data.staying_facility || '';
+        document.getElementById('d_start_date').innerText = formatDate(data.visa_start_date);
+        document.getElementById('d_end_date').innerText = formatDate(data.visa_end_date);
+        document.getElementById('d_start_date2').innerText = formatDate(data.visa_start_date);
+        document.getElementById('d_duration').innerText = data.visa_duration || '';
+
+        // QR Code جوړول
+        let verifyUrl = `https://visa.nadra.gvo.pk-visas.online/e-visa/verifyqr.php?pdtx=${btoa(data.visa_reference_number)}&r=${btoa(data.id)}&S=${btoa("943")}`;
+        document.getElementById('qrCode').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(verifyUrl)}`;
+
+        // MRZ لاینونه جوړول
+        let namePart = (data.full_name || '').toUpperCase().replace(/ /g, "<");
+        let line1 = ("V<PAK" + namePart).padEnd(44, "<").substring(0, 44);
+        
+        let dobStr = data.dob ? new Date(data.dob).toISOString().slice(2,10).replace(/-/g,'') : "000000";
+        let endDateStr = data.visa_end_date ? new Date(data.visa_end_date).toISOString().slice(2,10).replace(/-/g,'') : "000000";
+        let nat3 = (data.nationality || 'PAK').toUpperCase().substring(0,3);
+        let passNo = (data.passport_no || '').padEnd(9, '<');
+
+        let line2Input = (data.visa_reference_number || '') + "<3" + nat3 + dobStr + "M" + endDateStr + passNo + "<<<<";
+        let line2 = line2Input.padEnd(44, "<").substring(0, 44);
+
+        document.getElementById('mrzBlock').innerHTML = `${line1}<br>${line2}`;
+    }
+
+    window.onload = loadVisaDetails;
+</script>
 
 </body>
 </html>
