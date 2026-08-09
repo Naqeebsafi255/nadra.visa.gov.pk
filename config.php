@@ -1,16 +1,17 @@
 <?php
-$host = 'localhost';
-$username = 'pkvisasc_pkvisasc';
-$password = 'Naqeebsafi@12345';
-$database = 'pkvisasc_visas';
+// د Supabase د ډاتابیس نښلونې معلومات (PostgreSQL)
+$host = 'db.bwciadrnuxjowqgaflgu.supabase.co'; 
+$db   = 'postgres';             
+$user = 'postgres';             
+$pass = 'Naqeebsafi@123';         
+$port = '5432';
 
-// د MySQLi په واسطه نښلول
-$conn = mysqli_connect($host, $username, $password, $database);
-
-// د نښلیدو د تېروتنې چک کول
-if (!$conn) {
-    die("د ډیټابیس سره د نښلیدو ستونزه: " . mysqli_connect_error());
+// د PDO په واسطه نښلول (چې د Supabase/PostgreSQL لپاره تر ټولو خوندي او په Vercel کې تر ټولو غوره لار ده)
+try {
+    $conn = new PDO("pgsql:host=$host;port=$port;dbname=$db", $user, $pass);
+    // د خطاګانو د لیدلو لپاره تنظیمات
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die("❌ د ډاتابیس نښلونې تېروتنه: " . $e->getMessage());
 }
-
-// د پښتو او عربي تورو د سمې لوستلو لپاره
-mysqli_set_charset($conn, "utf8mb4");
+?>
