@@ -56,8 +56,8 @@
                     <input type="text" id="searchInput" placeholder="Search Name, Ref or Passport..." onkeyup="filterRecords()"
                            class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary/40 focus:border-primary outline-none transition-all">
                 </div>
-                <button onclick="fetchVisaRecords()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-all">Search</button>
-                <button onclick="clearSearch()" class="bg-gray-500 hover:bg-gray-600 text-white px-3 py-2 rounded-lg transition-all" title="Clear Search">
+                <button onclick="fetchVisaRecords()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-all cursor-pointer">Search</button>
+                <button onclick="clearSearch()" class="bg-gray-500 hover:bg-gray-600 text-white px-3 py-2 rounded-lg transition-all cursor-pointer" title="Clear Search">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
@@ -102,9 +102,9 @@
 
 <!-- JavaScript for Supabase Integration -->
 <script>
-    // دلته خپل د Supabase پته او Anon Key ځای پر ځای کړئ
-    const SUPABASE_URL = 'YOUR_SUPABASE_URL';
-    const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+    // Supabase پته او Anon Key
+    const SUPABASE_URL = 'https://bwciadrnuxjowqgaflgu.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ3Y2lhZHJudXhqb3dxZ2FmbGd1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyNzc1NTUsImV4cCI6MjEwMTg1MzU1NX0.B4J7D4Iii5lpEE9NPI1t9BAdXzWaHmJY7touKd-usO4';
 
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
