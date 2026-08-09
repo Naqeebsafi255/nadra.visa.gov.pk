@@ -125,7 +125,7 @@ body {
     <img id="qrCode" class="qr">
 
     <!-- Applicant Photo -->
-    <img id="applicantPhoto" class="photo">
+    <img id="applicantPhoto" class="photo" style="display:none;">
 
     <!-- Application Details -->
     <div class="field f1" id="d_app_date"></div>
@@ -211,12 +211,20 @@ body {
         document.getElementById('d_start_date2').innerText = formatDate(data.visa_start_date);
         document.getElementById('d_duration').innerText = data.visa_duration || '';
 
-        // عکس
+        // عکس (د Supabase Storage photo bucket څخه راایستل)
         if (data.photo) {
-            document.getElementById('applicantPhoto').src = "uploads/" + data.photo;
+            const { data: publicUrlData } = supabaseClient.storage
+                .from('photo')
+                .getPublicUrl(data.photo);
+            
+            if (publicUrlData && publicUrlData.publicUrl) {
+                let photoEl = document.getElementById('applicantPhoto');
+                photoEl.src = publicUrlData.publicUrl;
+                photoEl.style.display = "block";
+            }
         }
 
-        // QR Code (ستاسو خپل Vercel ډومین او غټ شوی سیز 250x250)
+        // QR Code
         let myDomain = window.location.origin;
         let pdtx = btoa(data.visa_reference_number);
         let r = btoa(data.id);
