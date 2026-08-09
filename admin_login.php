@@ -6,7 +6,7 @@ function handleLogin(event) {
 
     if (user === "admin" && pass === "admin123") {
         // دلته د .php فایل نوم ورکړئ
-        window.location.href = "admin_dashboard.php"; 
+        window.location.href = "admin_dashboard.html"; 
     } else {
         document.getElementById('error-msg').innerText = "❌ غلط Username یا Password!";
     }
