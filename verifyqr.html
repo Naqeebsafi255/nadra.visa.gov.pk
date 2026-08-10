@@ -8,7 +8,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
-    <!-- ✅ محلي فایلونه (چې شتون لري) -->
+    <!-- ✅ محلي فایلونه -->
     <link rel="stylesheet" type="text/css" href="uploads1/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="uploads1/ionicons.css">
     <link rel="stylesheet" type="text/css" href="uploads1/shortcodes.css">        
@@ -20,7 +20,7 @@
     <link rel="stylesheet" type="text/css" href="uploads1/primefaces.css">
     <link rel="stylesheet" type="text/css" href="uploads1/errormsg.css">
 
-    <!-- ✅ له انټرنېټ څخه فایلونه — د محلي فایلونو پر ځای -->
+    <!-- ✅ انټرنېټ فایلونه -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -106,18 +106,68 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(-360deg); }
         }
-        .btn-menu { display: none; cursor: pointer; z-index: 999; }
-        .btn-menu span {
-            display: block; width: 25px; height: 3px;
-            background: #333; margin: 5px 0; transition: 0.3s;
+
+        /* ✅ د موبایل مینو تڼۍ — سمه شوې */
+        .btn-menu {
+            display: none;
+            position: absolute;
+            right: 15px;
+            top: 18px;
+            width: 30px;
+            height: 24px;
+            cursor: pointer;
+            z-index: 9999;
         }
+        .btn-menu span {
+            display: block;
+            width: 100%;
+            height: 3px;
+            background: #333;
+            margin: 4px 0;
+            border-radius: 2px;
+        }
+
+        /* ✅ د مینو سټایلونه — پر کلیک کولو به ښکاره شي */
         @media (max-width: 991px) {
-            .btn-menu { display: block; position: absolute; right: 15px; top: 20px; }
-            .mainnav { display: none; width: 100%; clear: both; position: absolute; left: 0; top: 70px; background: #fff; border-top: 1px solid #eee; box-shadow: 0 5px 10px rgba(0,0,0,0.1); }
-            .mainnav.active { display: block; }
-            .mainnav ul { display: block; width: 100%; margin: 0; padding: 0; }
-            .mainnav ul li { display: block; width: 100%; border-top: 1px solid #eee; }
-            .mainnav ul li a { display: block; padding: 12px 20px; }
+            .btn-menu { display: block; }
+            
+            .mainnav {
+                display: none;
+                position: absolute;
+                left: 0;
+                top: 70px;
+                width: 100%;
+                background: #ffffff;
+                border-top: 1px solid #eee;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+                z-index: 9998;
+            }
+            
+            /* ✅ کله چې active کلاس ورکړل شي مینو به ښکاره شي */
+            .mainnav.active {
+                display: block !important;
+            }
+            
+            .mainnav ul {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+                width: 100%;
+            }
+            .mainnav ul li {
+                display: block;
+                width: 100%;
+                border-bottom: 1px solid #f0f0f0;
+            }
+            .mainnav ul li a {
+                display: block;
+                padding: 14px 20px;
+                color: #333;
+                text-decoration: none;
+            }
+            .mainnav ul li a:hover {
+                background: #f5f5f5;
+            }
         }
     </style>
 </head>
@@ -138,7 +188,12 @@
                             </div>                            
                         </div>
                         
-                        <div class="btn-menu" id="mobileMenuBtn"><span></span><span></span><span></span></div>
+                        <!-- ✅ د مینو تڼۍ -->
+                        <div class="btn-menu" id="mobileMenuBtn">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
                         
                         <div class="col-md-8 col-xs-2">	
                             <div class="nav-wrap">
@@ -271,14 +326,18 @@
 <!-- ✅ jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<!-- ✅ موبایل مینو -->
+<!-- ✅ د مینو کوډ — اوس به سمه کار وکړي -->
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const menuBtn = document.getElementById('mobileMenuBtn');
     const mainNav = document.getElementById('mainnav');
+    
     if (menuBtn && mainNav) {
-        menuBtn.addEventListener('click', function () {
+        menuBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
             mainNav.classList.toggle('active');
+            console.log('مینو کلیک شو! فعال:', mainNav.classList.contains('active'));
         });
     }
 });
