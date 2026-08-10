@@ -1,0 +1,380 @@
+<?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+?>
+<?php
+session_start();
+if (!isset($_SESSION['admin']) || $_SESSION['admin'] !== "admin") {
+    header("Location: admin_login.php");
+    exit;
+}
+
+include "config.php";
+
+$message = "";
+
+// ځکه چې اوس Supabase کاروو، دلته د ID په واسطه ریکارډ راخلو (دلته فرض کوو چې config.php کې مو د Supabase پیوستون تنظیم کړی دی، یا که MySQL کاروئ نو لاندې برخه د Supabase API په اساس تنظیم شوې ده)
+// که تاسو لا هم د MySQL ډاتابیس کاروئ خو غواړئ عکسونه Supabase ته لاړ شي، لاندې کوډ په پام کې ونیسئ:
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Edit Visa | Naqeeb System</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- Supabase JS Client -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+<style>
+    body { font-size: 15px; }
+    label { font-size: 14px !important; font-weight: 600 !important; color: #1a1a1a !important; }
+    input, select { font-size: 14px !important; color: #111 !important; }
+    .section-title {
+        font-size: 13px;
+        font-weight: 700;
+        color: #0b6b3a;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        border-bottom: 2px solid #0b6b3a;
+        padding-bottom: 4px;
+        margin-bottom: 12px;
+    }
+</style>
+<script>
+tailwind.config = {
+    theme: {
+        extend: {
+            colors: {
+                primary: '#0b6b3a',
+            }
+        }
+    }
+}
+</script>
+</head>
+<body class="bg-gray-100 min-h-screen py-6">
+
+<div class="container mx-auto px-4 max-w-5xl">
+    <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+
+        <div class="flex justify-between items-center mb-6 pb-4 border-b-2 border-primary">
+            <h2 class="text-2xl font-bold text-primary flex items-center gap-2">
+                <i class="fa fa-pencil-square-o"></i> Edit Visa Record
+            </h2>
+            <a href="admin_dashboard.html" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2">
+                <i class="fa fa-arrow-left"></i> Back
+            </a>
+        </div>
+
+        <div id="message-container"></div>
+
+        <form id="editVisaForm" onsubmit="updateVisaRecord(event)" class="space-y-6">
+
+            <!-- REFERENCE & NAME -->
+            <div>
+                <p class="section-title"><i class="fa fa-id-card"></i> Basic Information</p>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block mb-1">Reference Number <span class="text-red-500">*</span></label>
+                        <input type="text" id="visa_reference_number" required
+                               class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg outline-none focus:border-primary font-bold text-lg">
+                    </div>
+                    <div>
+                        <label class="block mb-1">Full Name <span class="text-red-500">*</span></label>
+                        <input type="text" id="full_name" required
+                               class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg outline-none focus:border-primary">
+                    </div>
+                </div>
+            </div>
+
+            <!-- PASSPORT -->
+            <div>
+                <p class="section-title"><i class="fa fa-book"></i> Passport Details</p>
+                <div class="grid md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block mb-1">Passport No <span class="text-red-500">*</span></label>
+                        <input type="text" id="passport_no" required
+                               class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg outline-none focus:border-primary">
+                    </div>
+                    <div>
+                        <label class="block mb-1">Passport Country <span class="text-red-500">*</span></label>
+                        <input type="text" id="passport_country" required
+                               class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg outline-none focus:border-primary">
+                    </div>
+                    <div>
+                        <label class="block mb-1">Nationality <span class="text-red-500">*</span></label>
+                        <input type="text" id="nationality" required
+                               class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg outline-none focus:border-primary">
+                    </div>
+                </div>
+            </div>
+
+            <!-- DOB + GENDER -->
+            <div>
+                <p class="section-title"><i class="fa fa-user"></i> Personal Details</p>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block mb-1">Date of Birth <span class="text-red-500">*</span></label>
+                        <input type="date" id="dob" required
+                               class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg outline-none focus:border-primary">
+                    </div>
+                    <div>
+                        <label class="block mb-1">Gender <span class="text-red-500">*</span></label>
+                        <div class="flex gap-4 mt-1">
+                            <label class="flex-1 cursor-pointer">
+                                <input type="radio" name="sex" value="M" class="hidden peer" id="gender_m">
+                                <div class="peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600 border-2 border-gray-300 rounded-lg py-2.5 flex items-center justify-center gap-2 text-gray-600 font-semibold transition-all hover:border-blue-400">
+                                    <i class="fa fa-male text-lg"></i> Male
+                                </div>
+                            </label>
+                            <label class="flex-1 cursor-pointer">
+                                <input type="radio" name="sex" value="F" class="hidden peer" id="gender_f">
+                                <div class="peer-checked:bg-pink-500 peer-checked:text-white peer-checked:border-pink-500 border-2 border-gray-300 rounded-lg py-2.5 flex items-center justify-center gap-2 text-gray-600 font-semibold transition-all hover:border-pink-400">
+                                    <i class="fa fa-female text-lg"></i> Female
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VISA DETAILS -->
+            <div>
+                <p class="section-title"><i class="fa fa-file-text"></i> Visa Details</p>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block mb-1">Visa Category <span class="text-red-500">*</span></label>
+                        <select id="visa_category" required class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg outline-none focus:border-primary">
+                            <option value="">-- Select Category --</option>
+                            <option value="Tourist/Visa">Tourist/Visit</option>
+                            <option value="Business">Business</option>
+                            <option value="Work">Work</option>
+                            <option value="Medical">Medical</option>
+                            <option value="Student">Study</option>
+                            <option value="Family Visa">Family Visit</option>
+                            <option value="Diplomatic Visa">Diplomatic / Official</option>
+                            <option value="Transit Visa">Transit/Visa</option>
+                            <option value="Refugee">Refugee / Humanitarian</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block mb-1">Visa Sub Category <span class="text-red-500">*</span></label>
+                        <select id="visa_sub_category" required class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg outline-none focus:border-primary">
+                            <option value="">-- Select Sub Category --</option>
+                            <option value="Individual (less Than 3 Months)">Individual (less Than 3 Months)</option>
+                            <option value="Individual">Individual</option>
+                            <option value="Transit/Transport(entry)">Transit/Transport(entry)</option>
+                            <option value="General">General</option>
+                            <option value="Family Visit">Family Visit</option>
+                            <option value="Short-Term">Short-Term</option>
+                            <option value="Group Entry">Group Entry - Single Visit</option>
+                            <option value="Emergency Entry">Emergency Entry - Short Stay</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- APPLICATION -->
+            <div>
+                <p class="section-title"><i class="fa fa-calendar"></i> Application Info</p>
+                <div class="grid md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block mb-1">Application Type <span class="text-red-500">*</span></label>
+                        <select id="application_type" required class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg outline-none focus:border-primary">
+                            <option value="">-- Select Type --</option>
+                            <option value="Entry">Entry</option>
+                            <option value="Extension">Extension</option>
+                            <option value="Renewal">Renewal</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block mb-1">Application Date <span class="text-red-500">*</span></label>
+                        <input type="date" id="application_date" required
+                               class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg outline-none focus:border-primary">
+                    </div>
+                    <div>
+                        <label class="block mb-1">Visa Grant Date</label>
+                        <input type="date" id="visa_grant_date"
+                               class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg outline-none focus:border-primary">
+                    </div>
+                </div>
+            </div>
+
+            <!-- VALIDITY -->
+            <div>
+                <p class="section-title"><i class="fa fa-clock-o"></i> Validity</p>
+                <div class="grid md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block mb-1">Start Date</label>
+                        <input type="date" id="visa_start_date"
+                               class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg outline-none focus:border-primary">
+                    </div>
+                    <div>
+                        <label class="block mb-1">End Date</label>
+                        <input type="date" id="visa_end_date"
+                               class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg outline-none focus:border-primary">
+                    </div>
+                    <div>
+                        <label class="block mb-1">Duration</label>
+                        <input type="text" id="visa_duration" placeholder="e.g. 30 Days / 1 Year"
+                               class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg outline-none focus:border-primary">
+                    </div>
+                </div>
+            </div>
+
+            <!-- OTHER -->
+            <div>
+                <p class="section-title"><i class="fa fa-cog"></i> Other Details</p>
+                <div class="grid md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block mb-1">Status <span class="text-red-500">*</span></label>
+                        <select id="status" required class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg outline-none focus:border-primary">
+                            <option value="Pending">Pending</option>
+                            <option value="Approved">Approved</option>
+                            <option value="Rejected">Rejected</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block mb-1">Stay / Facility <span class="text-red-500">*</span></label>
+                        <select id="staying_facility" required class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg outline-none focus:border-primary">
+                            <option value="">-- Select Option --</option>
+                            <option value="Single Entry">Single Entry</option>
+                            <option value="Multiple Entry - Upto 1 Year">Multiple Entry - Upto 1 Year</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block mb-1">Upload New Photo (Optional)</label>
+                        <input type="file" id="photo" accept="image/*"
+                               class="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg outline-none">
+                        <p class="text-xs text-gray-500 mt-1" id="current_photo_label">Current Photo: None</p>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit"
+                    class="w-full bg-primary hover:bg-green-800 text-white font-bold py-3 rounded-lg transition text-lg flex items-center justify-center gap-2 cursor-pointer">
+                <i class="fa fa-save"></i> Update Visa Record
+            </button>
+
+        </form>
+
+        <br>
+        <a href="admin_dashboard.html" class="text-sm font-medium text-primary hover:underline">
+            ⬅ Back to Dashboard
+        </a>
+    </div>
+</div>
+
+<script>
+    const SUPABASE_URL = 'https://bwciadrnuxjowqgaflgu.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ3Y2lhZHJudXhqb3dxZ2FmbGd1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyNzc1NTUsImV4cCI6MjEwMTg1MzU1NX0.B4J7D4Iii5lpEE9NPI1t9BAdXzWaHmJY7touKd-usO4';
+
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const recordId = urlParams.get('id');
+    let existingPhotoName = null;
+
+    // د پاڼې د خلاصیدو پر مهال د لومړنیو معلوماتو راایستل
+    async function fetchVisaDetails() {
+        if (!recordId) {
+            alert('Invalid Record ID');
+            window.location.href = 'admin_dashboard.html';
+            return;
+        }
+
+        const { data, error } = await supabaseClient
+            .from('visa_records1_new')
+            .select('*')
+            .eq('id', recordId)
+            .single();
+
+        if (error || !data) {
+            alert('Record not found!');
+            window.location.href = 'admin_dashboard.html';
+            return;
+        }
+
+        // د فورم فیلډونو ډکول
+        document.getElementById('visa_reference_number').value = data.visa_reference_number || '';
+        document.getElementById('full_name').value = data.full_name || '';
+        document.getElementById('passport_no').value = data.passport_no || '';
+        document.getElementById('passport_country').value = data.passport_country || '';
+        document.getElementById('nationality').value = data.nationality || '';
+        document.getElementById('dob').value = data.dob || '';
+        document.getElementById('visa_category').value = data.visa_category || '';
+        document.getElementById('visa_sub_category').value = data.visa_sub_category || '';
+        document.getElementById('application_type').value = data.application_type || '';
+        document.getElementById('application_date').value = data.application_date || '';
+        document.getElementById('visa_grant_date').value = data.visa_grant_date || '';
+        document.getElementById('visa_start_date').value = data.visa_start_date || '';
+        document.getElementById('visa_end_date').value = data.visa_end_date || '';
+        document.getElementById('visa_duration').value = data.visa_duration || '';
+        document.getElementById('status').value = data.status || 'Approved';
+        document.getElementById('staying_facility').value = data.staying_facility || '';
+
+        if (data.sex === 'F') {
+            document.getElementById('gender_f').checked = true;
+        } else {
+            document.getElementById('gender_m').checked = true;
+        }
+
+        if (data.photo) {
+            existingPhotoName = data.photo;
+            document.getElementById('current_photo_label').innerText = "Current Photo: " + data.photo;
+        }
+    }
+
+    // د اپډېټ کولو فنکشن
+    async function updateVisaRecord(event) {
+        event.preventDefault();
+        let messageContainer = document.getElementById('message-container');
+        let photoInput = document.getElementById('photo');
+        let photoName = existingPhotoName;
+
+        // که نوی عکس ټاکل شوی وي، سټوریج ته یې اپلوډ کوو
+        if (photoInput.files.length > 0) {
+            let file = photoInput.files[0];
+            let fileExt = file.name.split('.').pop();
+            photoName = `${Date.now()}_${Math.random().toString(36).substring(2)}.${fileExt}`;
+
+            const { error: uploadError } = await supabaseClient.storage
+                .from('photo')
+                .upload(photoName, file);
+
+            if (uploadError) {
+                messageContainer.innerHTML = `<div class='bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4'>❌ Photo Upload Error: ${uploadError.message}</div>`;
+                return;
+            }
+        }
+
+        let updateData = {
+            visa_reference_number: document.getElementById('visa_reference_number').value.trim(),
+            full_name: document.getElementById('full_name').value.trim(),
+            passport_no: document.getElementById('passport_no').value.trim(),
+            passport_country: document.getElementById('passport_country').value.trim(),
+            nationality: document.getElementById('nationality').value.trim(),
+            dob: document.getElementById('dob').value,
+            visa_category: document.getElementById('visa_category').value,
+            visa_sub_category: document.getElementById('visa_sub_category').value,
+            application_type: document.getElementById('application_type').value,
+            application_date: document.getElementById('application_date').value,
+            visa_grant_date: document.getElementById('visa_grant_date').value || null,
+            visa_start_date: document.getElementById('visa_start_date').value || null,
+            visa_end_date: document.getElementById('visa_end_date').value || null,
+            visa_duration: document.getElementById('visa_duration').value.trim(),
+            status: document.getElementById('status').value,
+            staying_facility: document.getElementById('staying_facility').value,
+            sex: document.querySelector('input[name="sex"]:checked').value,
+            photo: photoName
+        };
+
+        const { error } = await supabaseClient
+            .from('visa_records1_new')
+            .update(updateData)
+            .eq('id', recordId);
+
+        if (error) {
+            messageContainer.innerHTML = `<div class='bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4'>❌ Update Error: ${error.message}</div>`;
+        } else {
