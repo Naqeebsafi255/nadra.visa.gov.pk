@@ -8,9 +8,18 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Poppins:400,600,700&display=swap">
+    <!-- Local uploads1 folder files -->
+    <link rel="stylesheet" type="text/css" href="uploads1/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="uploads1/ionicons.css">
+    <link rel="stylesheet" type="text/css" href="uploads1/shortcodes.css">        
+    <link rel="stylesheet" type="text/css" href="uploads1/style.css">
+    <link rel="stylesheet" type="text/css" href="uploads1/font-nadra.css">
+    <link rel="stylesheet" type="text/css" href="uploads1/responsive.css">
+    <link rel="stylesheet" type="text/css" href="uploads1/animate.css">
+    <link rel="stylesheet" type="text/css" href="uploads1/custom.css">
+    <link rel="stylesheet" type="text/css" href="uploads1/primefaces.css">
+    <link rel="stylesheet" type="text/css" href="uploads1/errormsg.css">
+    <link rel="stylesheet" type="text/css" href="uploads1/font-awesome.min.css">
 
     <style type="text/css">
         body {
@@ -95,7 +104,6 @@
         }
     </style>
 </head>
-
 <body>
 
     <!-- Preloader -->
@@ -143,7 +151,7 @@
                             <div class="content-post" style="text-align: center;">
 
                                 <h1 class="title-post text-center urduLang" style="text-align: center;">
-                                    <a href="#" title="">Visa Reference Number - <span id="v_ref">Error / Not Found</span></a>
+                                    <a href="#" title="">Visa Reference Number - <span id="v_ref">Loading...</span></a>
                                 </h1>
                                 <hr>
 
@@ -299,7 +307,7 @@
 
         if (!encodedId) {
             document.getElementById("loader").style.display = "none";
-            alert('❌ د ستونزې تشخیص: په URL کې د "r" پارامتر (Parameter) شتون نه لري!');
+            alert('❌ د ستونزې تشخیص: په URL کې د "r" پارامتر شتون نه لري!');
             return;
         }
 
@@ -330,7 +338,7 @@
 
             if (!result || result.length === 0) {
                 document.getElementById("loader").style.display = "none";
-                alert('❌ د ستونزې تشخیص: د دې ID پر بنسټ په Supabase ډیټابیس کې هغسې ریکارډ ونه موندل شو!');
+                alert('❌ د ستونزې تشخیص: د دې ID پر بنسټ په Supabase ډیټابیس کې ریکارډ ونه موندل شو!');
                 return;
             }
 
