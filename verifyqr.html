@@ -19,6 +19,9 @@
     <link rel="stylesheet" type="text/css" href="uploads1/errormsg.css">
     <link rel="stylesheet" type="text/css" href="uploads1/font-awesome.min.css">
 
+    <!-- Supabase JS Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
     <style type="text/css">
         body {
             font: 14px/24px "Poppins", sans-serif !important;
@@ -104,27 +107,11 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(-360deg); }
         }
-
-        /* Custom Nav Menu */
-        .nav-menu {
-            float: right;
-            margin-top: 15px;
-        }
-        .nav-menu a {
-            color: #333;
-            font-weight: 600;
-            margin-left: 20px;
-            text-decoration: none;
-            font-size: 15px;
-        }
-        .nav-menu a:hover {
-            color: #1f6fa5;
-        }
     </style>
 </head>
 <body>
 
-    <!-- Loader (3 Layers) -->
+    <!-- Loader -->
     <div class="preloader" id="loader">
         <div class="loading-effect-2">
             <span></span>
@@ -135,20 +122,31 @@
 
     <div class="boxed">
         <!-- Header with Home Menu -->
-        <header id="header" class="header bg-color" style="border-bottom: 1px solid #eee;">
+        <header id="header" class="header bg-color">
             <div class="container" style="height: 70px;">
-                <div class="row" style="display: flex; align-items: center; height: 100%;">
-                    <div class="col-md-4 col-xs-6">
-                        <div id="logo" class="logo">
-                            <a href="index.html"><img src="uploads1/pak_visa_logo.png" style="height:50px;"></a>
+                <div class="row">
+                    <div class="header-wrap">
+                        <div class="col-md-4 col-xs-10">
+                            <div id="logo" class="logo">
+                                <a href="index.html"><img src="uploads1/pak_visa_logo.png" style="height:50px;"></a>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-8 col-xs-6">
-                        <nav class="nav-menu">
-                            <a href="index.html"><i class="fa fa-home"></i> کور (Home)</a>
-                            <a href="index.html"><i class="fa fa-search"></i> بل لټون</a>
-                            <a href="#" onclick="window.print();return false;"><i class="fa fa-print"></i> پرنټ</a>
-                        </nav>
+                        <div class="col-md-8 col-xs-2">    
+                            <div class="nav-wrap">
+                                <div class="btn-menu">
+                                    <span></span>
+                                </div>                              
+                                <nav id="mainnav" class="mainnav">
+                                    <ul class="menu">
+                                        <li><a href="index.html" class="urduLang urduFont">Home</a></li>
+                                        <li><a href="https://visa.nadra.gov.pk/how-to-apply/" target="_blank">Guidelines</a></li>
+                                        <li><a href="https://visa.nadra.gov.pk/download/" target="_blank">Downloads</a></li>
+                                        <li><a href="https://visa.nadra.gov.pk/faqs/" target="_blank">FAQ</a></li>
+                                        <li><a href="https://visa.nadra.gov.pk/contact/" target="_blank">Contact Us</a></li>
+                                    </ul>
+                                </nav>                                                      
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -168,7 +166,7 @@
 
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <img id="v_photo" src="" class="applicant-photo" width="152px" style="border-radius: 5px; margin: auto; display:none;" alt="Photo">
+                                        <img id="v_photo" src="" class="applicant-photo" width="152px" style="display:none; border-radius: 5px; margin: auto;" alt="Photo">
                                     </div>
 
                                     <div class="col-md-8">
@@ -251,31 +249,71 @@
     </div>
 
 <script>
-    // د URL د ټوکن لوستلو او ډیټا پورته کولو منطق
-    window.addEventListener('load', function() {
+    // Supabase پته او Anon Key
+    const SUPABASE_URL = 'https://bwciadrnuxjowqgaflgu.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ3Y2lhZHJudXhqb3dxZ2FmbGd1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyNzc1NTUsImV4cCI6MjEwMTg1MzU1NX0.B4J7D4Iii5lpEE9NPI1t9BAdXzWaHmJY7touKd-usO4';
+
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    async function loadVerificationDetails() {
         const urlParams = new URLSearchParams(window.location.search);
-        const token = urlParams.get('token');
+        const encodedId = urlParams.get('r');
 
-        // دلته ۳ ثانیې لوډر پاتې کیږي او بیا ډیټا ډکوي (تاسو کولی شئ د API یا بل ځای څخه ډیټا راوغوښتئ)
-        setTimeout(function() {
-            // د نمونې معلومات (دلته خپل مطلوب معلومات ځای پر ځای کولی شئ)
-            document.getElementById('v_ref').innerText = "PAK-VISA-2026-001";
-            document.getElementById('v_name').innerText = "Naqeebullah Safi";
-            document.getElementById('v_passport').innerText = "AB1234567";
-            document.getElementById('v_country').innerText = "Afghanistan";
-            document.getElementById('v_category').innerText = "Visit Visa";
-            document.getElementById('v_subcategory').innerText = "Tourism";
-            document.getElementById('v_apptype').innerText = "Individual";
-            
-            // عکس ښودل
-            let photoEl = document.getElementById('v_photo');
-            photoEl.src = "uploads1/default_user.png"; // دلته د عکس پته ورکړئ
-            photoEl.style.display = "block";
+        if (!encodedId) {
+            alert('Invalid Request: Record not specified.');
+            window.location.href = 'admin_dashboard.html';
+            return;
+        }
 
+        try {
+            // د base64 څخه د آډي (id) خلاصول
+            const recordId = atob(encodedId);
+
+            const { data, error } = await supabaseClient
+                .from('visa_records1_new')
+                .select('*')
+                .eq('id', recordId)
+                .single();
+
+            if (error || !data) {
+                alert('Visa Not Found or Invalid QR Code!');
+                return;
+            }
+
+            // معلومات په پاڼه کې اچول
+            document.getElementById('v_ref').innerText = data.visa_reference_number || '';
+            document.getElementById('v_name').innerText = data.full_name || '';
+            document.getElementById('v_passport').innerText = data.passport_no || '';
+            document.getElementById('v_country').innerText = data.passport_country || '';
+            document.getElementById('v_category').innerText = data.visa_category || '';
+            document.getElementById('v_subcategory').innerText = data.visa_sub_category || '';
+            document.getElementById('v_apptype').innerText = data.application_type || '';
+
+            // عکس له Supabase Storage (photo bucket) څخه راایستل
+            if (data.photo && data.photo.trim() !== "") {
+                const { data: publicUrlData } = supabaseClient.storage
+                    .from('photo')
+                    .getPublicUrl(data.photo);
+                
+                if (publicUrlData && publicUrlData.publicUrl) {
+                    let photoEl = document.getElementById('v_photo');
+                    photoEl.src = publicUrlData.publicUrl;
+                    photoEl.style.display = "block";
+                }
+            }
+
+        } catch (err) {
+            console.error('Error loading verification:', err);
+            alert('Error verifying visa details.');
+        } finally {
             // لوډر بندول
-            document.getElementById("loader").style.display = "none";
-        }, 3000);
-    });
+            setTimeout(function() {
+                document.getElementById("loader").style.display = "none";
+            }, 1000);
+        }
+    }
+
+    window.onload = loadVerificationDetails;
 </script>
 
 </body>
