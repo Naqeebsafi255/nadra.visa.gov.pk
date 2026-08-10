@@ -110,7 +110,8 @@
     <div class="preloader" id="loader">
         <div class="loading-effect-2">
             <span></span>
-            
+            <span></span>
+            <span></span>
         </div>
     </div>
 	
@@ -362,9 +363,11 @@
             document.getElementById('v_subcategory').innerText = data.visa_sub_category || '';
             document.getElementById('v_apptype').innerText = data.application_type || '';
             document.getElementById('v_facility').innerText = data.staying_facility || '';
-            document.getElementById('v_duration').innerText = data.duration || '';
-            document.getElementById('v_start').innerText = formatDate(data.start_date);
-            document.getElementById('v_end').innerText = formatDate(data.end_date);
+            
+            // د Supabase دقیق کالم نومونه دلته ولګول شول
+            document.getElementById('v_duration').innerText = data.visa_duration || '';
+            document.getElementById('v_start').innerText = formatDate(data.visa_start_date);
+            document.getElementById('v_end').innerText = formatDate(data.visa_end_date);
 
             if (data.photo && data.photo.trim() !== "") {
                 const photoUrl = `${SUPABASE_URL}/storage/v1/object/public/photo/${data.photo}`;
@@ -386,71 +389,3 @@
 
 </body>
 </html>
-<script>
-    const SUPABASE_URL = 'https://bwciadrnuxjowqgaflgu.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ3Y2lhZHJudXhqb3dxZ2FmbGd1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyNzc1NTUsImV4cCI6MjEwMTg1MzU1NX0.B4J7D4Iii5lpEE9NPI1t9BAdXzWaHmJY7touKd-usO4';
-
-    async function loadVerificationDetails() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const encodedId = urlParams.get('r');
-
-        if (!encodedId) {
-            document.getElementById("loader").style.display = "none";
-            alert('❌ د ستونزې تشخیص: په URL کې د "r" پارامتر شتون نه لري!');
-            return;
-        }
-
-        try {
-            let recordId = atob(encodedId);
-
-            const response = await fetch(`${SUPABASE_URL}/rest/v1/visa_records1_new?id=eq.${recordId}&select=*`, {
-                headers: {
-                    'apikey': SUPABASE_ANON_KEY,
-                    'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
-                }
-            });
-
-            const result = await response.json();
-
-            if (!result || result.length === 0) {
-                document.getElementById("loader").style.display = "none";
-                alert('❌ ریکارډ ونه موندل شو!');
-                return;
-            }
-
-            const data = result[0];
-            
-            // دلته کنسول ته ټول ریکارډ چاپ کوو ترڅو د کالمونو سم نومونه ووینئ
-            console.log("Database Record Data:", data);
-
-            document.getElementById('v_ref').innerText = data.visa_reference_number || '';
-            document.getElementById('v_name').innerText = data.full_name || '';
-            document.getElementById('v_passport').innerText = data.passport_no || '';
-            document.getElementById('v_country').innerText = data.passport_country || '';
-            document.getElementById('v_category').innerText = data.visa_category || '';
-            document.getElementById('v_subcategory').innerText = data.visa_sub_category || '';
-            document.getElementById('v_apptype').innerText = data.application_type || '';
-            document.getElementById('v_facility').innerText = data.staying_facility || '';
-
-            // دلته مستقیم د کالمونو نومونه ورکول کیږي (که ستاسو په ډیټابیس کې نومونه بل څه وي، دلته یې بدل کړئ)
-            document.getElementById('v_duration').innerText = data.duration || '';
-            document.getElementById('v_start').innerText = data.start_date || '';
-            document.getElementById('v_end').innerText = data.end_date || '';
-
-            if (data.photo && data.photo.trim() !== "") {
-                const photoUrl = `${SUPABASE_URL}/storage/v1/object/public/photo/${data.photo}`;
-                let photoEl = document.getElementById('v_photo');
-                photoEl.src = photoUrl;
-                photoEl.style.display = "block";
-            }
-
-        } catch (err) {
-            console.error('Error:', err);
-            alert('❌ تخنیکي تېروتنه: ' + err.message);
-        } finally {
-            document.getElementById("loader").style.display = "none";
-        }
-    }
-
-    window.onload = loadVerificationDetails;
-</script>
