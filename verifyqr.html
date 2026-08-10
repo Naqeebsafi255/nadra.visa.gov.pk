@@ -41,8 +41,7 @@
             .label-div { text-align: center; }
             .value-div { text-align: center; }
         }
-        
-        /* Preloader Styles (3 Layers) */
+        /* Preloader */
         .preloader {
             position: fixed;
             top: 0;
@@ -64,48 +63,31 @@
             position: absolute;
             border-radius: 50%;
             border: 3px solid transparent;
-        }
-        /* Outer */
-        .loading-effect-2 span:nth-child(1) {
             width: 100px;
             height: 100px;
             border-top: 2.5px solid #1f6fa5;
             border-right: 2.5px solid #1f6fa5;
             border-bottom: 2.5px solid #1f6fa5;
-            border-left: 2.5px solid transparent;
-            animation: spin 3s linear infinite;
-        }
-        /* Middle */
-        .loading-effect-2 span:nth-child(2) {
-            width: 70px;
-            height: 70px;
-            top: 15px;
-            left: 15px;
-            border-top: 2.5px solid #1f6fa5;
-            border-right: 2.5px solid #1f6fa5;
-            border-bottom: 2.5px solid #1f6fa5;
-            border-left: 2.5px solid transparent;
-            animation: spinReverse 2.5s linear infinite;
-        }
-        /* Inner */
-        .loading-effect-2 span:nth-child(3) {
-            width: 40px;
-            height: 40px;
-            top: 30px;
-            left: 30px;
-            border-top: 2.5px solid #1f6fa5;
-            border-right: 2.5px solid #1f6fa5;
-            border-bottom: 2.5px solid #1f6fa5;
-            border-left: 2.5px solid transparent;
             animation: spin 3s linear infinite;
         }
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        @keyframes spinReverse {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(-360deg); }
+        /* Custom Nav Menu */
+        .nav-menu {
+            float: right;
+            margin-top: 15px;
+        }
+        .nav-menu a {
+            color: #333;
+            font-weight: 600;
+            margin-left: 20px;
+            text-decoration: none;
+            font-size: 15px;
+        }
+        .nav-menu a:hover {
+            color: #1f6fa5;
         }
     </style>
 </head>
@@ -114,8 +96,6 @@
     <!-- Loader -->
     <div class="preloader" id="loader">
         <div class="loading-effect-2">
-            <span></span>
-            <span></span>
             <span></span>
         </div>
     </div>
@@ -159,7 +139,7 @@
                         <article class="post style2">
                             <div class="content-post" style="text-align: center;">
 
-                                <h1 class="title-post text-center" style="text-align: center;">
+                                <h1 class="title-post text-center urduLang" style="text-align: center;">
                                     <a href="#" title="">Visa Reference Number - <span id="v_ref">Loading...</span></a>
                                 </h1>
                                 <hr>
@@ -181,7 +161,7 @@
 
                                         <div class="row" style="margin-top: 20px;">
                                             <div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div">
-                                                <span style="font-size: 14px; font-weight: bold;">Passport No</span>
+                                                <span style="font-size: 24px; font-weight: bold;">Passport No</span>
                                             </div>
                                             <div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div">
                                                 <p id="v_passport" style="font-size: 15px;"></p>
@@ -190,7 +170,7 @@
 
                                         <div class="row" style="margin-top: 20px;">
                                             <div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div">
-                                                <span style="font-size: 14px; font-weight: bold;">Passport Country</span>
+                                                <span style="font-size: 24px; font-weight: bold;">Passport Country</span>
                                             </div>
                                             <div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div">
                                                 <p id="v_country" style="font-size: 15px;"></p>
@@ -227,6 +207,54 @@
                                             </div>
                                             <div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div">
                                                 <p id="v_apptype"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row" style="margin-top: 20px;">
+                                    <div class="col-md-6">
+                                        <div class="row" style="margin-top: 20px;">
+                                            <div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div">
+                                                <label>Staying Facility</label>
+                                            </div>
+                                            <div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div">
+                                                <p id="v_facility"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="row" style="margin-top: 20px;">
+                                            <div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div">
+                                                <label>Visa Duration</label>
+                                            </div>
+                                            <div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div">
+                                                <p id="v_duration"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row" style="margin-top: 20px;">
+                                    <div class="col-md-6">
+                                        <div class="row" style="margin-top: 20px;">
+                                            <div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div">
+                                                <label>Visa Start Date</label>
+                                            </div>
+                                            <div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div">
+                                                <p id="v_start"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="row" style="margin-top: 20px;">
+                                            <div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div">
+                                                <label>Visa End Date</label>
+                                            </div>
+                                            <div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div">
+                                                <p id="v_end"></p>
                                             </div>
                                         </div>
                                     </div>
@@ -280,6 +308,14 @@
                 return;
             }
 
+            // نیټې د ډیسک پاتې کیدو لپاره فارمیټ کول
+            function formatDate(dateString) {
+                if (!dateString) return '';
+                let d = new Date(dateString);
+                if (isNaN(d)) return dateString;
+                return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).replace(/ /g, '-');
+            }
+
             // معلومات په پاڼه کې اچول
             document.getElementById('v_ref').innerText = data.visa_reference_number || '';
             document.getElementById('v_name').innerText = data.full_name || '';
@@ -288,6 +324,10 @@
             document.getElementById('v_category').innerText = data.visa_category || '';
             document.getElementById('v_subcategory').innerText = data.visa_sub_category || '';
             document.getElementById('v_apptype').innerText = data.application_type || '';
+            document.getElementById('v_facility').innerText = data.staying_facility || '';
+            document.getElementById('v_duration').innerText = data.duration || '';
+            document.getElementById('v_start').innerText = formatDate(data.start_date);
+            document.getElementById('v_end').innerText = formatDate(data.end_date);
 
             // عکس له Supabase Storage (photo bucket) څخه راایستل
             if (data.photo && data.photo.trim() !== "") {
