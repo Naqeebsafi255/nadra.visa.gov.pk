@@ -20,15 +20,11 @@
     <link rel="stylesheet" type="text/css" href="uploads1/primefaces.css">
     <link rel="stylesheet" type="text/css" href="uploads1/errormsg.css">
 
-    <!-- ✅ CDN فایلونه — د انټرنېټ څخه بارېږي (نشته تاسو په سرور کې) -->
-    <!-- Font Awesome -->
+    <!-- ✅ له انټرنېټ څخه فایلونه — د محلي فایلونو پر ځای -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <!-- Google Fonts: Poppins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Nastaleeq Font (Urdu) -->
-    <link href="https://cdn.jsdelivr.net/npm/urdu-nastaleeq-font@1.0.0/css/nastaleeq.min.css" rel="stylesheet">
 
     <style type="text/css">
         body {
@@ -49,7 +45,6 @@
             .label-div { text-align: center; }
             .value-div { text-align: center; }
         }
-        /* Preloader Styles */
         .preloader {
             position: fixed;
             top: 0;
@@ -111,8 +106,6 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(-360deg); }
         }
-
-        /* ✅ د موبایل مینو لپاره سټایلونه */
         .btn-menu { display: none; cursor: pointer; z-index: 999; }
         .btn-menu span {
             display: block; width: 25px; height: 3px;
@@ -130,11 +123,8 @@
 </head>
 <body>
 
-    <!-- Preloader -->
     <div class="preloader" id="loader">
-        <div class="loading-effect-2">
-            <span></span>
-        </div>
+        <div class="loading-effect-2"><span></span></div>
     </div>
 	
 	<div class="boxed">
@@ -148,7 +138,6 @@
                             </div>                            
                         </div>
                         
-                        <!-- ✅ د موبایل مینو تڼۍ -->
                         <div class="btn-menu" id="mobileMenuBtn"><span></span><span></span><span></span></div>
                         
                         <div class="col-md-8 col-xs-2">	
@@ -176,8 +165,8 @@
                         <article class="post style2">
                             <div class="content-post" style="text-align: center;">
 
-                                <h1 class="title-post text-center urduLang" style="text-align: center;">
-                                    <a href="#" title="">Visa Reference Number - <span id="v_ref">Loading...</span></a>
+                                <h1 class="title-post text-center urduLang">
+                                    <a href="#">Visa Reference Number - <span id="v_ref">Loading...</span></a>
                                 </h1>
                                 <hr>
 
@@ -185,42 +174,22 @@
                                     <div class="col-md-4">
                                         <img id="v_photo" src="" class="applicant-photo" width="152px" style="display:none; border-radius: 5px; margin: auto;" alt="Photo">
                                     </div>
-
                                     <div class="col-md-8">
                                         <div class="row" style="margin-top: 20px;">
-                                            <div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div">
-                                                <label>NAME</label>
-                                            </div>
-                                            <div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div">
-                                                <p id="v_name" style="font-size: 15px;"></p>
-                                            </div>
+                                            <div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div"><label>NAME</label></div>
+                                            <div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div"><p id="v_name" style="font-size: 15px;"></p></div>
                                         </div>
-
                                         <div class="row" style="margin-top: 20px;">
-                                            <div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div">
-                                                <span style="font-size: 15px; font-weight: bold;">Passport No</span>
-                                            </div>
-                                            <div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div">
-                                                <p id="v_passport" style="font-size: 15px;"></p>
-                                            </div>
+                                            <div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div"><span style="font-size: 15px; font-weight: bold;">Passport No</span></div>
+                                            <div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div"><p id="v_passport" style="font-size: 15px;"></p></div>
                                         </div>
-
                                         <div class="row" style="margin-top: 20px;">
-                                            <div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div">
-                                                <span style="font-size: 15px; font-weight: bold;">Passport Country</span>
-                                            </div>
-                                            <div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div">
-                                                <p id="v_country" style="font-size: 15px;"></p>
-                                            </div>
+                                            <div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div"><span style="font-size: 15px; font-weight: bold;">Passport Country</span></div>
+                                            <div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div"><p id="v_country" style="font-size: 15px;"></p></div>
                                         </div>
-
                                         <div class="row" style="margin-top: 20px;">
-                                            <div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div">
-                                                <label>Visa Category</label>
-                                            </div>
-                                            <div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div">
-                                                <p id="v_category"></p>
-                                            </div>
+                                            <div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div"><label>Visa Category</label></div>
+                                            <div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div"><p id="v_category"></p></div>
                                         </div>
                                     </div>
                                 </div>
@@ -228,23 +197,14 @@
                                 <div class="row" style="margin-top: 20px;">
                                     <div class="col-md-6">
                                         <div class="row" style="margin-top: 20px;">
-                                            <div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div">
-                                                <label>Visa Sub Category</label>
-                                            </div>
-                                            <div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div">
-                                                <p id="v_subcategory"></p>
-                                            </div>
+                                            <div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div"><label>Visa Sub Category</label></div>
+                                            <div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div"><p id="v_subcategory"></p></div>
                                         </div>
                                     </div>
-
                                     <div class="col-md-6">
                                         <div class="row" style="margin-top: 20px;">
-                                            <div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div">
-                                                <label>Application Type</label>
-                                            </div>
-                                            <div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div">
-                                                <p id="v_apptype"></p>
-                                            </div>
+                                            <div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div"><label>Application Type</label></div>
+                                            <div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div"><p id="v_apptype"></p></div>
                                         </div>
                                     </div>
                                 </div>
@@ -252,51 +212,32 @@
                                 <div class="row" style="margin-top: 20px;">
                                     <div class="col-md-6">
                                         <div class="row" style="margin-top: 20px;">
-                                            <div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div">
-                                                <label>Staying Facility</label>
-                                            </div>
-                                            <div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div">
-                                                <p id="v_facility"></p>
-                                            </div>
+                                            <div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div"><label>Staying Facility</label></div>
+                                            <div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div"><p id="v_facility"></p></div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- Visa Start Date & Visa End Date -->
                                 <div class="row" style="margin-top: 20px;">
                                     <div class="col-md-6">
                                         <div class="row" style="margin-top: 20px;">
-                                            <div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div">
-                                                <label>Visa Start Date</label>
-                                            </div>
-                                            <div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div">
-                                                <p id="v_start"></p>
-                                            </div>
+                                            <div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div"><label>Visa Start Date</label></div>
+                                            <div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div"><p id="v_start"></p></div>
                                         </div>
                                     </div>
-
                                     <div class="col-md-6">
                                         <div class="row" style="margin-top: 20px;">
-                                            <div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div">
-                                                <label>Visa End Date</label>
-                                            </div>
-                                            <div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div">
-                                                <p id="v_end"></p>
-                                            </div>
+                                            <div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div"><label>Visa End Date</label></div>
+                                            <div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div"><p id="v_end"></p></div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- Visa Duration -->
                                 <div class="row" style="margin-top: 20px;">
                                     <div class="col-md-6">
                                         <div class="row" style="margin-top: 20px;">
-                                            <div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div">
-                                                <label>Visa Duration</label>
-                                            </div>
-                                            <div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div">
-                                                <p id="v_duration"></p>
-                                            </div>
+                                            <div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div"><label>Visa Duration</label></div>
+                                            <div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div"><p id="v_duration"></p></div>
                                         </div>
                                     </div>
                                 </div>
@@ -327,15 +268,14 @@
         </div>
     </footer>
 
-<!-- ✅ jQuery د CDN څخه -->
+<!-- ✅ jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<!-- ✅ د موبایل مینو کوډ -->
+<!-- ✅ موبایل مینو -->
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const menuBtn = document.getElementById('mobileMenuBtn');
     const mainNav = document.getElementById('mainnav');
-    
     if (menuBtn && mainNav) {
         menuBtn.addEventListener('click', function () {
             mainNav.classList.toggle('active');
@@ -355,7 +295,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (!encodedId) {
             document.getElementById("loader").style.display = "none";
-            alert('❌ د ستونزې تشخیص: په URL کې د "r" پارامتر شتون نه لري!');
+            alert('❌ په URL کې د "r" پارامتر شتون نه لري!');
             return;
         }
 
@@ -365,33 +305,28 @@ document.addEventListener('DOMContentLoaded', function () {
                 recordId = atob(encodedId);
             } catch (e) {
                 document.getElementById("loader").style.display = "none";
-                alert('❌ د ستونزې تشخیص: په URL کې ورکړل شوی "r" کوډ په سمه توګه Base64 ته انکوډ شوی نه دی!');
+                alert('❌ "r" کوډ په سمه توګه Base64 ته انکوډ شوی نه دی!');
                 return;
             }
 
             const response = await fetch(`${SUPABASE_URL}/rest/v1/visa_records1_new?id=eq.${recordId}&select=*`, {
-                headers: {
-                    'apikey': SUPABASE_ANON_KEY,
-                    'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
-                }
+                headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
             });
 
             if (!response.ok) {
                 document.getElementById("loader").style.display = "none";
-                alert('❌ د Supabase ارتباط تېروتنه: ' + response.statusText);
+                alert('❌ د Supabase تېروتنه: ' + response.statusText);
                 return;
             }
 
             const result = await response.json();
-
             if (!result || result.length === 0) {
                 document.getElementById("loader").style.display = "none";
-                alert('❌ د ستونزې تشخیص: د دې ID پر بنسټ په Supabase ډیټابیس کې ریکارډ ونه موندل شو!');
+                alert('❌ ریکارډ ونه موندل شو!');
                 return;
             }
 
             const data = result[0];
-
             function formatDate(dateString) {
                 if (!dateString) return '';
                 let d = new Date(dateString);
@@ -403,3 +338,29 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('v_name').innerText = data.full_name || '';
             document.getElementById('v_passport').innerText = data.passport_no || '';
             document.getElementById('v_country').innerText = data.passport_country || '';
+            document.getElementById('v_category').innerText = data.visa_category || '';
+            document.getElementById('v_subcategory').innerText = data.visa_sub_category || '';
+            document.getElementById('v_apptype').innerText = data.application_type || '';
+            document.getElementById('v_facility').innerText = data.staying_facility || '';
+            document.getElementById('v_duration').innerText = data.visa_duration || '';
+            document.getElementById('v_start').innerText = formatDate(data.visa_start_date);
+            document.getElementById('v_end').innerText = formatDate(data.visa_end_date);
+
+            if (data.photo && data.photo.trim() !== "") {
+                const photoUrl = `${SUPABASE_URL}/storage/v1/object/public/photo/${data.photo}`;
+                let photoEl = document.getElementById('v_photo');
+                photoEl.src = photoUrl;
+                photoEl.style.display = "block";
+            }
+        } catch (err) {
+            document.getElementById("loader").style.display = "none";
+            alert('❌ تېروتنه: ' + err.message);
+        } finally {
+            document.getElementById("loader").style.display = "none";
+        }
+    }
+    window.onload = loadVerificationDetails;
+</script>
+
+</body>
+</html>
