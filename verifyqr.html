@@ -39,6 +39,39 @@
         @media (max-width: 991px) {
             .label-div { text-align: center; }
             .value-div { text-align: center; }
+            /* په موبايل کې د مینو د ښودلو لپاره سټایل */
+            .mainnav .menu {
+                display: none;
+                background: #fff;
+                position: absolute;
+                width: 100%;
+                left: 0;
+                top: 70px;
+                box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+                padding: 15px 0;
+                z-index: 999;
+            }
+            .mainnav .menu.active {
+                display: block !important;
+            }
+            .mainnav .menu li {
+                display: block;
+                text-align: center;
+                padding: 10px 0;
+            }
+            .btn-menu {
+                display: block !important;
+                cursor: pointer;
+                font-size: 24px;
+                float: right;
+                margin-top: 20px;
+                color: #333;
+            }
+        }
+        @media (min-width: 992px) {
+            .btn-menu {
+                display: none !important;
+            }
         }
         /* Preloader Styles */
         .preloader {
@@ -126,6 +159,10 @@
                         </div>
                         <div class="col-md-8 col-xs-2">	
                             <div class="nav-wrap">
+                                <!-- د موبايل د مینو تڼۍ -->
+                                <div class="btn-menu" onclick="toggleMenu()">
+                                    <i class="fa fa-bars"></i>
+                                </div>
                                 <nav id="mainnav" class="mainnav">
                                     <ul class="menu">
                                         <li><a href="#" class="urduLang urduFont">Home</a></li>
@@ -235,7 +272,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Visa Start Date & Visa End Date (مخکې راغلې) -->
+                                <!-- Visa Start Date & Visa End Date -->
                                 <div class="row" style="margin-top: 20px;">
                                     <div class="col-md-6">
                                         <div class="row" style="margin-top: 20px;">
@@ -260,7 +297,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Visa Duration (اخر ته راغله) -->
+                                <!-- Visa Duration -->
                                 <div class="row" style="margin-top: 20px;">
                                     <div class="col-md-6">
                                         <div class="row" style="margin-top: 20px;">
@@ -301,6 +338,12 @@
     </footer>
 
 <script>
+    // د موبايل مینو د پرانستلو او تړلو فنکشن
+    function toggleMenu() {
+        var menu = document.querySelector('.mainnav .menu');
+        menu.classList.toggle('active');
+    }
+
     const SUPABASE_URL = 'https://bwciadrnuxjowqgaflgu.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ3Y2lhZHJudXhqb3dxZ2FmbGd1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyNzc1NTUsImV4cCI6MjEwMTg1MzU1NX0.B4J7D4Iii5lpEE9NPI1t9BAdXzWaHmJY7touKd-usO4';
 
@@ -369,22 +412,3 @@
             document.getElementById('v_end').innerText = formatDate(data.visa_end_date);
 
             if (data.photo && data.photo.trim() !== "") {
-                const photoUrl = `${SUPABASE_URL}/storage/v1/object/public/photo/${data.photo}`;
-                let photoEl = document.getElementById('v_photo');
-                photoEl.src = photoUrl;
-                photoEl.style.display = "block";
-            }
-
-        } catch (err) {
-            document.getElementById("loader").style.display = "none";
-            alert('❌ جدي تخنیکي تېروتنه پیدا شوه: ' + err.message);
-        } finally {
-            document.getElementById("loader").style.display = "none";
-        }
-    }
-
-    window.onload = loadVerificationDetails;
-</script>
-
-</body>
-</html>
