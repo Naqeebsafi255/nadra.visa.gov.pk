@@ -8,7 +8,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
-    <!-- Local uploads1 folder files -->
+    <!-- ✅ CSS Files -->
     <link rel="stylesheet" type="text/css" href="uploads1/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="uploads1/ionicons.css">
     <link rel="stylesheet" type="text/css" href="uploads1/shortcodes.css">        
@@ -39,39 +39,6 @@
         @media (max-width: 991px) {
             .label-div { text-align: center; }
             .value-div { text-align: center; }
-            /* په موبايل کې د مینو د ښودلو لپاره سټایل */
-            .mainnav .menu {
-                display: none;
-                background: #fff;
-                position: absolute;
-                width: 100%;
-                left: 0;
-                top: 70px;
-                box-shadow: 0 5px 10px rgba(0,0,0,0.1);
-                padding: 15px 0;
-                z-index: 999;
-            }
-            .mainnav .menu.active {
-                display: block !important;
-            }
-            .mainnav .menu li {
-                display: block;
-                text-align: center;
-                padding: 10px 0;
-            }
-            .btn-menu {
-                display: block !important;
-                cursor: pointer;
-                font-size: 24px;
-                float: right;
-                margin-top: 20px;
-                color: #333;
-            }
-        }
-        @media (min-width: 992px) {
-            .btn-menu {
-                display: none !important;
-            }
         }
         /* Preloader Styles */
         .preloader {
@@ -135,6 +102,21 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(-360deg); }
         }
+
+        /* ✅ موبایل مینو لپاره — اړین سټایلونه */
+        .btn-menu { display: none; cursor: pointer; }
+        .btn-menu span {
+            display: block; width: 25px; height: 3px;
+            background: #333; margin: 5px 0; transition: 0.3s;
+        }
+        @media (max-width: 991px) {
+            .btn-menu { display: block; position: absolute; right: 15px; top: 20px; }
+            .mainnav { display: none; width: 100%; clear: both; }
+            .mainnav.active { display: block; }
+            .mainnav ul { display: block; width: 100%; margin: 0; padding: 0; }
+            .mainnav ul li { display: block; width: 100%; border-top: 1px solid #eee; }
+            .mainnav ul li a { display: block; padding: 10px 15px; }
+        }
     </style>
 </head>
 <body>
@@ -143,13 +125,12 @@
     <div class="preloader" id="loader">
         <div class="loading-effect-2">
             <span></span>
-            
         </div>
     </div>
 	
 	<div class="boxed">
         <header id="header" class="header bg-color">
-            <div class="container" style="height: 70px;">
+            <div class="container" style="height: 70px; position: relative;">
                 <div class="row">
                     <div class="header-wrap">
                         <div class="col-md-4 col-xs-10">
@@ -157,12 +138,12 @@
                                 <a href="#"><img src="uploads1/pak_visa_logo.png" style="height:50px;" alt="Logo"></a>
                             </div>                            
                         </div>
+                        
+                        <!-- ✅ موبایل مینو تڼۍ -->
+                        <div class="btn-menu" id="mobileMenuBtn"><span></span><span></span><span></span></div>
+                        
                         <div class="col-md-8 col-xs-2">	
                             <div class="nav-wrap">
-                                <!-- د موبايل د مینو تڼۍ -->
-                                <div class="btn-menu" onclick="toggleMenu()">
-                                    <i class="fa fa-bars"></i>
-                                </div>
                                 <nav id="mainnav" class="mainnav">
                                     <ul class="menu">
                                         <li><a href="#" class="urduLang urduFont">Home</a></li>
@@ -337,13 +318,23 @@
         </div>
     </footer>
 
+<!-- ✅ لاندې دوه لاینونه اضافه شول — د JQuery او مینو لپاره -->
+<script src="uploads1/jquery.min.js"></script>
 <script>
-    // د موبايل مینو د پرانستلو او تړلو فنکشن
-    function toggleMenu() {
-        var menu = document.querySelector('.mainnav .menu');
-        menu.classList.toggle('active');
+// ✅ د موبایل مینو کارونې کوډ
+document.addEventListener('DOMContentLoaded', function () {
+    const menuBtn = document.getElementById('mobileMenuBtn');
+    const mainNav = document.getElementById('mainnav');
+    
+    if (menuBtn && mainNav) {
+        menuBtn.addEventListener('click', function () {
+            mainNav.classList.toggle('active');
+        });
     }
+});
+</script>
 
+<script>
     const SUPABASE_URL = 'https://bwciadrnuxjowqgaflgu.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ3Y2lhZHJudXhqb3dxZ2FmbGd1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyNzc1NTUsImV4cCI6MjEwMTg1MzU1NX0.B4J7D4Iii5lpEE9NPI1t9BAdXzWaHmJY7touKd-usO4';
 
@@ -405,10 +396,9 @@
             document.getElementById('v_subcategory').innerText = data.visa_sub_category || '';
             document.getElementById('v_apptype').innerText = data.application_type || '';
             document.getElementById('v_facility').innerText = data.staying_facility || '';
-            
-            // د Supabase دقیق کالم نومونه دلته ولګول شول
             document.getElementById('v_duration').innerText = data.visa_duration || '';
             document.getElementById('v_start').innerText = formatDate(data.visa_start_date);
             document.getElementById('v_end').innerText = formatDate(data.visa_end_date);
 
             if (data.photo && data.photo.trim() !== "") {
+                const photoUrl = `${SUPABASE_URL}/storage/v1/obje
