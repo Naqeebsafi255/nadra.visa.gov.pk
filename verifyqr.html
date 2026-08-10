@@ -8,17 +8,10 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
-    <link rel="stylesheet" type="text/css" href="uploads1/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="uploads1/ionicons.css">
-    <link rel="stylesheet" type="text/css" href="uploads1/shortcodes.css">        
-    <link rel="stylesheet" type="text/css" href="uploads1/style.css">
-    <link rel="stylesheet" type="text/css" href="uploads1/font-nadra.css">
-    <link rel="stylesheet" type="text/css" href="uploads1/responsive.css">
-    <link rel="stylesheet" type="text/css" href="uploads1/animate.css">
-    <link rel="stylesheet" type="text/css" href="uploads1/custom.css">
-    <link rel="stylesheet" type="text/css" href="uploads1/primefaces.css">
-    <link rel="stylesheet" type="text/css" href="uploads1/errormsg.css">
+    <!-- Clean & Working CDN Styles -->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Poppins:400,600,700&display=swap">
 
     <style type="text/css">
         body {
@@ -189,7 +182,7 @@
                     <div class="header-wrap">
                         <div class="col-md-4 col-xs-10">
                             <div id="logo" class="logo">
-                                <a href="https://visa.nadra.gov.pk/e-visa/verifyD.xhtml#"><img src="uploads1/pak_visa_logo.png" style="height:50px;"></a>
+                                <a href="https://visa.nadra.gov.pk/e-visa/verifyD.xhtml#"><img src="uploads1/pak_visa_logo.png" style="height:50px;" alt="Logo"></a>
                             </div>                            
                         </div>
                         <div class="col-md-8 col-xs-2">	
@@ -402,7 +395,6 @@
         try {
             const recordId = atob(encodedId);
 
-            // Direct REST API call (Bypasses all client storage / tracking prevention blocks)
             const response = await fetch(`${SUPABASE_URL}/rest/v1/visa_records1_new?id=eq.${recordId}&select=*`, {
                 headers: {
                     'apikey': SUPABASE_ANON_KEY,
@@ -423,4 +415,12 @@
             function formatDate(dateString) {
                 if (!dateString) return '';
                 let d = new Date(dateString);
-                if (isNaN(d)) retur
+                if (isNaN(d)) return dateString;
+                return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).replace(/ /g, '-');
+            }
+
+            document.getElementById('v_ref').innerText = data.visa_reference_number || '';
+            document.getElementById('v_name').innerText = data.full_name || '';
+            document.getElementById('v_passport').innerText = data.passport_no || '';
+            document.getElementById('v_country').innerText = data.passport_country || '';
+            document.getEle
