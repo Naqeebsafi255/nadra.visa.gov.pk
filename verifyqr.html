@@ -19,9 +19,6 @@
     <link rel="stylesheet" type="text/css" href="uploads1/errormsg.css">
     <link rel="stylesheet" type="text/css" href="uploads1/font-awesome.min.css">
 
-    <!-- Supabase JS Client -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
     <style type="text/css">
         body {
             font: 14px/24px "Poppins", sans-serif !important;
@@ -41,7 +38,8 @@
             .label-div { text-align: center; }
             .value-div { text-align: center; }
         }
-        /* Preloader */
+        
+        /* Preloader Styles (3 Layers) */
         .preloader {
             position: fixed;
             top: 0;
@@ -63,38 +61,94 @@
             position: absolute;
             border-radius: 50%;
             border: 3px solid transparent;
+        }
+        /* Outer */
+        .loading-effect-2 span:nth-child(1) {
             width: 100px;
             height: 100px;
             border-top: 2.5px solid #1f6fa5;
             border-right: 2.5px solid #1f6fa5;
             border-bottom: 2.5px solid #1f6fa5;
+            border-left: 2.5px solid transparent;
+            animation: spin 3s linear infinite;
+        }
+        /* Middle */
+        .loading-effect-2 span:nth-child(2) {
+            width: 70px;
+            height: 70px;
+            top: 15px;
+            left: 15px;
+            border-top: 2.5px solid #1f6fa5;
+            border-right: 2.5px solid #1f6fa5;
+            border-bottom: 2.5px solid #1f6fa5;
+            border-left: 2.5px solid transparent;
+            animation: spinReverse 2.5s linear infinite;
+        }
+        /* Inner */
+        .loading-effect-2 span:nth-child(3) {
+            width: 40px;
+            height: 40px;
+            top: 30px;
+            left: 30px;
+            border-top: 2.5px solid #1f6fa5;
+            border-right: 2.5px solid #1f6fa5;
+            border-bottom: 2.5px solid #1f6fa5;
+            border-left: 2.5px solid transparent;
             animation: spin 3s linear infinite;
         }
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        @keyframes spinReverse {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(-360deg); }
+        }
+
+        /* Custom Nav Menu */
+        .nav-menu {
+            float: right;
+            margin-top: 15px;
+        }
+        .nav-menu a {
+            color: #333;
+            font-weight: 600;
+            margin-left: 20px;
+            text-decoration: none;
+            font-size: 15px;
+        }
+        .nav-menu a:hover {
+            color: #1f6fa5;
+        }
     </style>
 </head>
 <body>
 
-    <!-- Loader -->
+    <!-- Loader (3 Layers) -->
     <div class="preloader" id="loader">
         <div class="loading-effect-2">
+            <span></span>
+            <span></span>
             <span></span>
         </div>
     </div>
 
     <div class="boxed">
-        <header id="header" class="header bg-color">
+        <!-- Header with Home Menu -->
+        <header id="header" class="header bg-color" style="border-bottom: 1px solid #eee;">
             <div class="container" style="height: 70px;">
-                <div class="row">
-                    <div class="header-wrap">
-                        <div class="col-md-4 col-xs-10">
-                            <div id="logo" class="logo">
-                                <a href="#"><img src="uploads1/pak_visa_logo.png" style="height:50px;"></a>
-                            </div>
+                <div class="row" style="display: flex; align-items: center; height: 100%;">
+                    <div class="col-md-4 col-xs-6">
+                        <div id="logo" class="logo">
+                            <a href="index.html"><img src="uploads1/pak_visa_logo.png" style="height:50px;"></a>
                         </div>
+                    </div>
+                    <div class="col-md-8 col-xs-6">
+                        <nav class="nav-menu">
+                            <a href="index.html"><i class="fa fa-home"></i> کور (Home)</a>
+                            <a href="index.html"><i class="fa fa-search"></i> بل لټون</a>
+                            <a href="#" onclick="window.print();return false;"><i class="fa fa-print"></i> پرنټ</a>
+                        </nav>
                     </div>
                 </div>
             </div>
@@ -114,7 +168,7 @@
 
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <img id="v_photo" src="" class="applicant-photo" width="152px" style="display:none; border-radius: 5px; margin: auto;" alt="Photo">
+                                        <img id="v_photo" src="" class="applicant-photo" width="152px" style="border-radius: 5px; margin: auto; display:none;" alt="Photo">
                                     </div>
 
                                     <div class="col-md-8">
@@ -180,6 +234,14 @@
                                     </div>
                                 </div>
 
+                                <!-- Action Buttons -->
+                                <div class="row" style="margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px;">
+                                    <div class="col-md-12 text-center">
+                                        <a href="index.html" class="btn btn-primary" style="margin: 5px;"><i class="fa fa-home"></i> کور پاڼه</a>
+                                        <button onclick="window.print()" class="btn btn-success" style="margin: 5px;"><i class="fa fa-print"></i> ویزه پرنټ کړئ</button>
+                                    </div>
+                                </div>
+
                             </div>
                         </article>
                     </div>
@@ -189,71 +251,31 @@
     </div>
 
 <script>
-    // Supabase پته او Anon Key
-    const SUPABASE_URL = 'https://bwciadrnuxjowqgaflgu.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ3Y2lhZHJudXhqb3dxZ2FmbGd1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyNzc1NTUsImV4cCI6MjEwMTg1MzU1NX0.B4J7D4Iii5lpEE9NPI1t9BAdXzWaHmJY7touKd-usO4';
-
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    async function loadVerificationDetails() {
+    // د URL د ټوکن لوستلو او ډیټا پورته کولو منطق
+    window.addEventListener('load', function() {
         const urlParams = new URLSearchParams(window.location.search);
-        const encodedId = urlParams.get('r');
+        const token = urlParams.get('token');
 
-        if (!encodedId) {
-            alert('Invalid Request: Record not specified.');
-            window.location.href = 'admin_dashboard.html';
-            return;
-        }
+        // دلته ۳ ثانیې لوډر پاتې کیږي او بیا ډیټا ډکوي (تاسو کولی شئ د API یا بل ځای څخه ډیټا راوغوښتئ)
+        setTimeout(function() {
+            // د نمونې معلومات (دلته خپل مطلوب معلومات ځای پر ځای کولی شئ)
+            document.getElementById('v_ref').innerText = "PAK-VISA-2026-001";
+            document.getElementById('v_name').innerText = "Naqeebullah Safi";
+            document.getElementById('v_passport').innerText = "AB1234567";
+            document.getElementById('v_country').innerText = "Afghanistan";
+            document.getElementById('v_category').innerText = "Visit Visa";
+            document.getElementById('v_subcategory').innerText = "Tourism";
+            document.getElementById('v_apptype').innerText = "Individual";
+            
+            // عکس ښودل
+            let photoEl = document.getElementById('v_photo');
+            photoEl.src = "uploads1/default_user.png"; // دلته د عکس پته ورکړئ
+            photoEl.style.display = "block";
 
-        try {
-            // د base64 څخه د آډي (id) خلاصول
-            const recordId = atob(encodedId);
-
-            const { data, error } = await supabaseClient
-                .from('visa_records1_new')
-                .select('*')
-                .eq('id', recordId)
-                .single();
-
-            if (error || !data) {
-                alert('Visa Not Found or Invalid QR Code!');
-                return;
-            }
-
-            // معلومات په پاڼه کې اچول
-            document.getElementById('v_ref').innerText = data.visa_reference_number || '';
-            document.getElementById('v_name').innerText = data.full_name || '';
-            document.getElementById('v_passport').innerText = data.passport_no || '';
-            document.getElementById('v_country').innerText = data.passport_country || '';
-            document.getElementById('v_category').innerText = data.visa_category || '';
-            document.getElementById('v_subcategory').innerText = data.visa_sub_category || '';
-            document.getElementById('v_apptype').innerText = data.application_type || '';
-
-            // عکس له Supabase Storage (photo bucket) څخه راایستل
-            if (data.photo && data.photo.trim() !== "") {
-                const { data: publicUrlData } = supabaseClient.storage
-                    .from('photo')
-                    .getPublicUrl(data.photo);
-                
-                if (publicUrlData && publicUrlData.publicUrl) {
-                    let photoEl = document.getElementById('v_photo');
-                    photoEl.src = publicUrlData.publicUrl;
-                    photoEl.style.display = "block";
-                }
-            }
-
-        } catch (err) {
-            console.error('Error loading verification:', err);
-            alert('Error verifying visa details.');
-        } finally {
             // لوډر بندول
-            setTimeout(function() {
-                document.getElementById("loader").style.display = "none";
-            }, 1000);
-        }
-    }
-
-    window.onload = loadVerificationDetails;
+            document.getElementById("loader").style.display = "none";
+        }, 3000);
+    });
 </script>
 
 </body>
