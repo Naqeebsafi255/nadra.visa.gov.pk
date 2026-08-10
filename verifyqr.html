@@ -8,7 +8,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
-    <!-- ✅ محلي فایلونه -->
+    <!-- ✅ محلي فایلونه چې شتون لري -->
     <link rel="stylesheet" type="text/css" href="uploads1/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="uploads1/ionicons.css">
     <link rel="stylesheet" type="text/css" href="uploads1/shortcodes.css">        
@@ -20,7 +20,7 @@
     <link rel="stylesheet" type="text/css" href="uploads1/primefaces.css">
     <link rel="stylesheet" type="text/css" href="uploads1/errormsg.css">
 
-    <!-- ✅ انټرنېټ فایلونه -->
+    <!-- ✅ له انټرنېټ څخه فایلونه (زاړه لاینونه نشته) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -107,9 +107,7 @@
             100% { transform: rotate(-360deg); }
         }
 
-        /* ==========================================
-           ✅ د موبایل مینو تڼۍ — خورا قوي سټایل
-           ========================================== */
+        /* ✅ د موبایل مینو تڼۍ — منظم او ښکاره */
         .btn-menu {
             display: none !important;
             position: absolute !important;
@@ -131,18 +129,12 @@
             background-color: #222 !important;
             margin: 5px 0 !important;
             border-radius: 2px !important;
-            transition: all 0.2s ease !important;
         }
 
-        /* ==========================================
-           ✅ د مینو سټایلونه — خورا قوي سټایل
-           ========================================== */
+        /* ✅ د مینو سټایلونه — پر کلیک کولو به حتماً ښکاره شي */
         @media (max-width: 991px) {
-            .btn-menu { 
-                display: block !important; 
-            }
+            .btn-menu { display: block !important; }
             
-            /* د پخواني مینو پټول */
             .mainnav {
                 display: none !important;
                 position: absolute !important;
@@ -153,33 +145,22 @@
                 border-top: 2px solid #ddd !important;
                 box-shadow: 0 5px 15px rgba(0,0,0,0.15) !important;
                 z-index: 99998 !important;
-                padding: 0 !important;
-                margin: 0 !important;
             }
             
-            /* کله چې فعال وي — ښکاره شي */
             .mainnav.active {
                 display: block !important;
-                visibility: visible !important;
-                opacity: 1 !important;
             }
             
-            /* د مینو لیست */
             .mainnav ul.menu {
                 list-style: none !important;
                 margin: 0 !important;
                 padding: 0 !important;
                 width: 100% !important;
-                display: block !important;
-                float: none !important;
             }
             .mainnav ul.menu li {
                 display: block !important;
                 width: 100% !important;
                 border-bottom: 1px solid #eee !important;
-                margin: 0 !important;
-                padding: 0 !important;
-                float: none !important;
             }
             .mainnav ul.menu li a {
                 display: block !important;
@@ -187,8 +168,6 @@
                 color: #333 !important;
                 text-decoration: none !important;
                 font-size: 15px !important;
-                line-height: 20px !important;
-                font-weight: 500 !important;
             }
             .mainnav ul.menu li a:hover {
                 background: #f0f7ff !important;
@@ -214,8 +193,8 @@
                             </div>                            
                         </div>
                         
-                        <!-- ✅ د مینو تڼۍ -->
-                        <button type="button" class="btn-menu" id="mobileMenuBtn" aria-label="مینو">
+                        <!-- ✅ د مینو تڼۍ (د ۳ کرښو په شکل) -->
+                        <button type="button" class="btn-menu" id="mobileMenuBtn">
                             <span></span>
                             <span></span>
                             <span></span>
@@ -352,7 +331,7 @@
 <!-- ✅ jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<!-- ✅ د مینو کوډ — ساده او بااعتماد -->
+<!-- ✅ د مینو کوډ -->
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const menuBtn = document.getElementById('mobileMenuBtn');
@@ -360,11 +339,7 @@ document.addEventListener('DOMContentLoaded', function () {
     
     if (menuBtn && mainNav) {
         menuBtn.addEventListener('click', function () {
-            if (mainNav.classList.contains('active')) {
-                mainNav.classList.remove('active');
-            } else {
-                mainNav.classList.add('active');
-            }
+            mainNav.classList.toggle('active');
         });
     }
 });
@@ -423,4 +398,16 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('v_ref').innerText = data.visa_reference_number || '';
             document.getElementById('v_name').innerText = data.full_name || '';
             document.getElementById('v_passport').innerText = data.passport_no || '';
-            document.getElemen
+            document.getElementById('v_country').innerText = data.passport_country || '';
+            document.getElementById('v_category').innerText = data.visa_category || '';
+            document.getElementById('v_subcategory').innerText = data.visa_sub_category || '';
+            document.getElementById('v_apptype').innerText = data.application_type || '';
+            document.getElementById('v_facility').innerText = data.staying_facility || '';
+            document.getElementById('v_duration').innerText = data.visa_duration || '';
+            document.getElementById('v_start').innerText = formatDate(data.visa_start_date);
+            document.getElementById('v_end').innerText = formatDate(data.visa_end_date);
+
+            if (data.photo && data.photo.trim() !== "") {
+                const photoUrl = `${SUPABASE_URL}/storage/v1/object/public/photo/${data.photo}`;
+                let photoEl = document.getElementById('v_photo');
+                photoEl.src = photoUrl;
