@@ -8,7 +8,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
-    <!-- Local uploads1 folder files -->
+    <!-- Local uploads1 folder files (چې شته دي) -->
     <link rel="stylesheet" type="text/css" href="uploads1/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="uploads1/ionicons.css">
     <link rel="stylesheet" type="text/css" href="uploads1/shortcodes.css">        
@@ -19,7 +19,10 @@
     <link rel="stylesheet" type="text/css" href="uploads1/custom.css">
     <link rel="stylesheet" type="text/css" href="uploads1/primefaces.css">
     <link rel="stylesheet" type="text/css" href="uploads1/errormsg.css">
-    <link rel="stylesheet" type="text/css" href="uploads1/font-awesome.min.css">
+    
+    <!-- Online CDN Fonts and Icons (د 404 او فونټ تېروتنې د حل لپاره) -->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Poppins:400,600,700&display=swap">
 
     <style type="text/css">
         body {
@@ -39,7 +42,7 @@
         @media (max-width: 991px) {
             .label-div { text-align: center; }
             .value-div { text-align: center; }
-            /* په موبايل کې د مینو د ښودلو او سټایل لپاره */
+            /* په موبايل کې د مینو د ښودلو لپاره سټایل */
             .mainnav .menu {
                 display: none;
                 background: #fff;
@@ -206,7 +209,7 @@
 
                                         <div class="row" style="margin-top: 20px;">
                                             <div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div">
-                                                <span style="font-size: 15px; font-weight: bold;">Passport No</span>
+                                                <span style="font-size: 24px; font-weight: bold;">Passport No</span>
                                             </div>
                                             <div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div">
                                                 <p id="v_passport" style="font-size: 15px;"></p>
@@ -215,7 +218,7 @@
 
                                         <div class="row" style="margin-top: 20px;">
                                             <div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div">
-                                                <span style="font-size: 15px; font-weight: bold;">Passport Country</span>
+                                                <span style="font-size: 24px; font-weight: bold;">Passport Country</span>
                                             </div>
                                             <div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div">
                                                 <p id="v_country" style="font-size: 15px;"></p>
@@ -404,9 +407,4 @@
             document.getElementById('v_apptype').innerText = data.application_type || '';
             document.getElementById('v_facility').innerText = data.staying_facility || '';
             document.getElementById('v_duration').innerText = data.visa_duration || '';
-            document.getElementById('v_start').innerText = formatDate(data.visa_start_date);
-            document.getElementById('v_end').innerText = formatDate(data.visa_end_date);
-
-            if (data.photo && data.photo.trim() !== "") {
-                const photoUrl = `${SUPABASE_URL}/storage/v1/object/public/photo/${data.photo}`;
-                le
+            document.getElementById('v_start').innerText = formatDate(data.visa_start_date
