@@ -8,7 +8,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
-    <!-- Local uploads1 folder files -->
+    <!-- Local uploads1 folder files (چې شته دي) -->
     <link rel="stylesheet" type="text/css" href="uploads1/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="uploads1/ionicons.css">
     <link rel="stylesheet" type="text/css" href="uploads1/shortcodes.css">        
@@ -19,7 +19,9 @@
     <link rel="stylesheet" type="text/css" href="uploads1/custom.css">
     <link rel="stylesheet" type="text/css" href="uploads1/primefaces.css">
     <link rel="stylesheet" type="text/css" href="uploads1/errormsg.css">
-    <link rel="stylesheet" type="text/css" href="uploads1/font-awesome.min.css">
+    
+    <!-- Online CDN for FontAwesome (د 404 او فونټ تېروتنو د له منځه وړلو لپاره) -->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <style type="text/css">
         body {
@@ -407,6 +409,4 @@
             document.getElementById('v_start').innerText = formatDate(data.visa_start_date);
             document.getElementById('v_end').innerText = formatDate(data.visa_end_date);
 
-            if (data.photo && data.photo.trim() !== "") {
-                const photoUrl = `${SUPABASE_URL}/storage/v1/object/public/photo/${data.photo}`;
-                let p
+            if (data.
