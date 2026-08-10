@@ -3,14 +3,22 @@
 <head id="j_idt2">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>PAK VISA - Verification Portal</title>
+    <title>PAK VISA</title>
     
+    <meta name="format-detection" content="telephone=no">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
-    <!-- Stable Online CDN Links to prevent 404 errors -->
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="uploads1/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="uploads1/ionicons.css">
+    <link rel="stylesheet" type="text/css" href="uploads1/shortcodes.css">        
+    <link rel="stylesheet" type="text/css" href="uploads1/style.css">
+    <link rel="stylesheet" type="text/css" href="uploads1/font-nadra.css">
+    <link rel="stylesheet" type="text/css" href="uploads1/responsive.css">
+    <link rel="stylesheet" type="text/css" href="uploads1/animate.css">
+    <link rel="stylesheet" type="text/css" href="uploads1/custom.css">
+    <link rel="stylesheet" type="text/css" href="uploads1/primefaces.css">
+    <link rel="stylesheet" type="text/css" href="uploads1/errormsg.css">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Poppins:400,600,700&display=swap">
 
     <style type="text/css">
         body {
@@ -18,6 +26,7 @@
             background-color: #fff;
             color: #666666;
         }
+        
         .preview__header {
             font-size: 12px;
             min-height: 35px;
@@ -25,14 +34,59 @@
             z-index: 100;
             color: #fff;
         }
-        .label-div { text-align: left; }
-        .value-div { text-align: left; }
-        @media (max-width: 991px) {
-            .label-div { text-align: center; }
-            .value-div { text-align: center; }
+        
+        @media (max-width: 767px) {
+            .banner-hide-xs {
+                display: none !important;
+            }
         }
         
-        /* Preloader */
+        .top-banner-allignment {
+            width: auto;
+            padding-right: 100px;
+            padding-top: 50px;
+            float: right;
+            display: block;
+        }
+        
+        @media(max-width: 991px) {
+            .top-banner-allignment {
+                text-align: center;
+                float: none;
+                padding-right: 0;
+                padding-top: 200px;
+                display: block;
+            }
+        }
+        
+        @media(max-width: 430px) {
+            .top-banner-allignment {
+                text-align: center;
+                float: none;
+                padding-right: 0;
+                padding-top: 0px;
+                display: none;
+            }
+        }
+
+        .label-div {
+            text-align: left;
+        }
+
+        .value-div {
+            text-align: left;
+        }
+
+        @media ( max-width : 991px) {
+            .label-div {
+                text-align: center;
+            }
+            .value-div {
+                text-align: center;
+            }
+        }
+
+        /* Preloader Styles */
         .preloader {
             position: fixed;
             top: 0;
@@ -45,16 +99,19 @@
             align-items: center;
             z-index: 9999;
         }
+
         .loading-effect-2 {
             position: relative;
             width: 100px;
             height: 100px;
         }
+
         .loading-effect-2 span {
             position: absolute;
             border-radius: 50%;
             border: 3px solid transparent;
         }
+
         .loading-effect-2 span:nth-child(1) {
             width: 100px;
             height: 100px;
@@ -64,6 +121,7 @@
             border-left: 2.5px solid transparent;
             animation: spin 3s linear infinite;
         }
+
         .loading-effect-2 span:nth-child(2) {
             width: 70px;
             height: 70px;
@@ -75,6 +133,7 @@
             border-left: 2.5px solid transparent;
             animation: spinReverse 2.5s linear infinite;
         }
+
         .loading-effect-2 span:nth-child(3) {
             width: 40px;
             height: 40px;
@@ -86,22 +145,22 @@
             border-left: 2.5px solid transparent;
             animation: spin 3s linear infinite;
         }
+
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
         @keyframes spinReverse {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(-360deg); }
         }
-        .boxed { background: #fff; min-height: 100vh; }
-        .header { background: #fff; border-bottom: 1px solid #eee; padding: 10px 0; }
-        .post { background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 0 15px rgba(0,0,0,0.05); margin-top: 30px; }
     </style>
 </head>
+
 <body>
 
-    <!-- Loader -->
+    <!-- Preloader -->
     <div class="preloader" id="loader">
         <div class="loading-effect-2">
             <span></span>
@@ -109,158 +168,221 @@
             <span></span>
         </div>
     </div>
-
-    <div class="boxed">
-        <header id="header" class="header">
+	
+	<div class="row">
+		<div class="col-md-12 col-sm-12 banner-hide-xs preview__header" id="infoHeader" style="display: none !important;">
+			<div class="col-md-11 col-sm-11 text-center">
+				<p style="margin-top: 7px;padding-left: 228px;font-weight: bold;font-size: 14px;">
+					PAK VISA IS CROSS BROWSER COMPATIBLE. HOWEVER, FOR OPTIMAL EXPERIENCE RECOMMENDED BROWSER IS GOOGLE CHROME. 
+				</p>
+			</div>
+			<div class="col-md-1 col-sm-1 text-right">
+				<span onclick="closeInfoBar();" style="cursor: pointer;line-height: 35px;">X</span>
+			</div>
+		</div>
+	</div>
+		
+	<div class="boxed">
+        <header id="header" class="header bg-color">
             <div class="container" style="height: 70px;">
-                <div class="row" style="display: flex; align-items: center; height: 100%;">
-                    <div class="col-md-4 col-xs-10">
-                        <div id="logo" class="logo">
-                            <a href="#"><img src="uploads1/pak_visa_logo.png" style="height:50px;" alt="Logo"></a>
+                <div class="row">
+                    <div class="header-wrap">
+                        <div class="col-md-4 col-xs-10">
+                            <div id="logo" class="logo">
+                                <a href="https://visa.nadra.gov.pk/e-visa/verifyD.xhtml#"><img src="uploads1/pak_visa_logo.png" style="height:50px;"></a>
+                            </div>                            
+                        </div>
+                        <div class="col-md-8 col-xs-2">	
+                            <div class="nav-wrap">
+                                <nav id="mainnav" class="mainnav">
+                                    <ul class="menu">
+                                        <li><a href="https://visa.nadra.gov.pk/e-visa/verifyD.xhtml#" class="urduLang urduFont">Home</a></li>
+                                        <li><a href="https://visa.nadra.gov.pk/how-to-apply/" target="_blank">Guidelines</a></li>
+                                        <li><a href="https://visa.nadra.gov.pk/download/" target="_blank">Downloads</a></li>
+                                        <li><a href="https://visa.nadra.gov.pk/faqs/" target="_blank">FAQ</a></li>
+                                        <li><a href="https://visa.nadra.gov.pk/contact/" target="_blank">Contact Us</a></li>
+                                    </ul>
+                                </nav>														
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </header>
+		
+		<section class="flat-row">
+			<div class="container" style="margin-top: 40px;">
+		        <div class="row pd-contact-v2">
+                    <form id="errorForm" name="errorForm" method="post" action="https://visa.nadra.gov.pk/e-visa/verifyD.xhtml" enctype="application/x-www-form-urlencoded">
+                        <input type="hidden" name="errorForm" value="errorForm">
 
-        <section class="flat-row" style="margin-top: 40px;">
+                        <div id="login-block" class="col-md-8 col-md-offset-2 animated slideInUp fadeOutDown">
+                            <article class="post style2">
+                                <div class="content-post" style="text-align: center;">
+
+                                    <h1 class="title-post text-center urduLang" style="text-align: center;">
+                                        <a href="https://visa.nadra.gov.pk/e-visa/verifyD.xhtml#" title="">Visa Reference Number - <span id="v_ref">Loading...</span></a>
+                                    </h1>
+                                    <hr>
+
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <img id="v_photo" src="" class="applicant-photo" width="152px" style="display:none; border-radius: 5px; margin: auto;" alt="Photo">
+                                        </div>
+
+                                        <div class="col-md-8">
+                                            <div class="row" style="margin-top: 20px;">
+                                                <div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div">
+                                                    <label>NAME</label>
+                                                </div>
+                                                <div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div">
+                                                    <p id="v_name" style="font-size: 15px;"></p>
+                                                </div>
+                                            </div>
+
+                                            <div class="row" style="margin-top: 20px;">
+                                                <div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div">
+                                                    <span style="font-size: 24px; font-weight: bold;">Passport No</span>
+                                                </div>
+                                                <div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div">
+                                                    <p id="v_passport" style="font-size: 15px;"></p>
+                                                </div>
+                                            </div>
+
+                                            <div class="row" style="margin-top: 20px;">
+                                                <div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div">
+                                                    <span style="font-size: 24px; font-weight: bold;">Passport Country</span>
+                                                </div>
+                                                <div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div">
+                                                    <p id="v_country" style="font-size: 15px;"></p>
+                                                </div>
+                                            </div>
+
+                                            <div class="row" style="margin-top: 20px;">
+                                                <div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div">
+                                                    <label>Visa Category</label>
+                                                </div>
+                                                <div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div">
+                                                    <p id="v_category"></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row" style="margin-top: 20px;">
+                                        <div class="col-md-6">
+                                            <div class="row" style="margin-top: 20px;">
+                                                <div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div">
+                                                    <label>Visa Sub Category</label>
+                                                </div>
+                                                <div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div">
+                                                    <p id="v_subcategory"></p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="row" style="margin-top: 20px;">
+                                                <div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div">
+                                                    <label>Application Type</label>
+                                                </div>
+                                                <div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div">
+                                                    <p id="v_apptype"></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row" style="margin-top: 20px;">
+                                        <div class="col-md-6">
+                                            <div class="row" style="margin-top: 20px;">
+                                                <div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div">
+                                                    <label>Staying Facility</label>
+                                                </div>
+                                                <div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div">
+                                                    <p id="v_facility"></p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="row" style="margin-top: 20px;">
+                                                <div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div">
+                                                    <label>Visa Duration</label>
+                                                </div>
+                                                <div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div">
+                                                    <p id="v_duration"></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row" style="margin-top: 20px;">
+                                        <div class="col-md-6">
+                                            <div class="row" style="margin-top: 20px;">
+                                                <div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div">
+                                                    <label>Visa Start Date</label>
+                                                </div>
+                                                <div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div">
+                                                    <p id="v_start"></p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="row" style="margin-top: 20px;">
+                                                <div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div">
+                                                    <label>Visa End Date</label>
+                                                </div>
+                                                <div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div">
+                                                    <p id="v_end"></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row text-center ct-u-marginTop20" style="text-align: center; margin-top: 25px;">
+                                        <a href="admin_dashboard.html" class="btn btn-success btn-lg button-submit">Back to Login</a>
+                                    </div>
+
+                                </div>
+                            </article>
+                        </div>
+                        <input type="hidden" name="javax.faces.ViewState" id="j_id1:javax.faces.ViewState:1" value="394132253836225138:3484308588824853169" autocomplete="off">
+                    </form>
+		        </div>
+			</div>
+		</section>
+	</div>
+
+    <footer id="footer">
+        <div class="footer-bottom visible-lg visible-md visible-sm">
             <div class="container">
-                <div class="row pd-contact-v2">
-                    <div id="login-block" class="col-md-8 col-md-offset-2">
-                        <article class="post style2">
-                            <div class="content-post" style="text-align: center;">
-
-                                <h1 class="title-post text-center" style="text-align: center; font-size: 22px; font-weight: bold; color: #333;">
-                                    <a href="#" title="" style="text-decoration: none;">Visa Reference Number - <span id="v_ref" style="color: #1f6fa5;">Loading...</span></a>
-                                </h1>
-                                <hr>
-
-                                <div class="row" style="display: flex; align-items: center; flex-wrap: wrap;">
-                                    <div class="col-md-4 text-center">
-                                        <img id="v_photo" src="" class="applicant-photo" width="152px" style="display:none; border-radius: 5px; margin: auto;" alt="Photo">
-                                    </div>
-
-                                    <div class="col-md-8">
-                                        <div class="row" style="margin-top: 15px;">
-                                            <div class="col-md-5 label-div">
-                                                <label>NAME</label>
-                                            </div>
-                                            <div class="col-md-7 value-div">
-                                                <p id="v_name" style="font-size: 15px; font-weight: bold; color: #222;"></p>
-                                            </div>
-                                        </div>
-
-                                        <div class="row" style="margin-top: 15px;">
-                                            <div class="col-md-5 label-div">
-                                                <span style="font-size: 14px; font-weight: bold;">Passport No</span>
-                                            </div>
-                                            <div class="col-md-7 value-div">
-                                                <p id="v_passport" style="font-size: 15px;"></p>
-                                            </div>
-                                        </div>
-
-                                        <div class="row" style="margin-top: 15px;">
-                                            <div class="col-md-5 label-div">
-                                                <span style="font-size: 14px; font-weight: bold;">Passport Country</span>
-                                            </div>
-                                            <div class="col-md-7 value-div">
-                                                <p id="v_country" style="font-size: 15px;"></p>
-                                            </div>
-                                        </div>
-
-                                        <div class="row" style="margin-top: 15px;">
-                                            <div class="col-md-5 label-div">
-                                                <label>Visa Category</label>
-                                            </div>
-                                            <div class="col-md-7 value-div">
-                                                <p id="v_category" style="font-size: 15px;"></p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row" style="margin-top: 15px;">
-                                    <div class="col-md-6">
-                                        <div class="row" style="margin-top: 15px;">
-                                            <div class="col-md-5 label-div">
-                                                <label>Visa Sub Category</label>
-                                            </div>
-                                            <div class="col-md-7 value-div">
-                                                <p id="v_subcategory"></p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="row" style="margin-top: 15px;">
-                                            <div class="col-md-5 label-div">
-                                                <label>Application Type</label>
-                                            </div>
-                                            <div class="col-md-7 value-div">
-                                                <p id="v_apptype"></p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row" style="margin-top: 15px;">
-                                    <div class="col-md-6">
-                                        <div class="row" style="margin-top: 15px;">
-                                            <div class="col-md-5 label-div">
-                                                <label>Staying Facility</label>
-                                            </div>
-                                            <div class="col-md-7 value-div">
-                                                <p id="v_facility"></p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="row" style="margin-top: 15px;">
-                                            <div class="col-md-5 label-div">
-                                                <label>Visa Duration</label>
-                                            </div>
-                                            <div class="col-md-7 value-div">
-                                                <p id="v_duration"></p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row" style="margin-top: 15px;">
-                                    <div class="col-md-6">
-                                        <div class="row" style="margin-top: 15px;">
-                                            <div class="col-md-5 label-div">
-                                                <label>Visa Start Date</label>
-                                            </div>
-                                            <div class="col-md-7 value-div">
-                                                <p id="v_start"></p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="row" style="margin-top: 15px;">
-                                            <div class="col-md-5 label-div">
-                                                <label>Visa End Date</label>
-                                            </div>
-                                            <div class="col-md-7 value-div">
-                                                <p id="v_end"></p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row text-center" style="margin-top: 30px;">
-                                    <a href="admin_dashboard.html" class="btn btn-success btn-lg">Back to Dashboard</a>
-                                </div>
-
-                            </div>
-                        </article>
+                <div class="row">
+                    <div class="col-md-12 text-center" id="footerCredits" style="float: none; margin:0 auto;">
+                        <div class="copyright text-uppercase text-center">
+                            <p class="urdufooter" style="width: 100%; margin-bottom:0;">COPYRIGHT © 2015 - 2026 MINISTRY OF INTERIOR, GOVERNMENT OF PAKISTAN - All rights reserved - v: 6.0.2</p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+        
+        <div class="footer-bottom visible-xs">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center" id="footerCredits" style="float: none; margin:0 auto;">
+                        <div class="copyright text-uppercase text-center">
+                            <p class="urdufooter" style="width: 100%; margin-bottom:0;">COPYRIGHT © 2015 - 2026 MINISTRY OF INTERIOR, GOVERNMENT OF PAKISTAN - v: 6.0.2</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div class="button-go-top">
+        <a href="https://visa.nadra.gov.pk/e-visa/verifyD.xhtml#" title="" class="go-top"><i class="fa fa-chevron-up"></i></a>
     </div>
 
 <script>
@@ -280,7 +402,7 @@
         try {
             const recordId = atob(encodedId);
 
-            // Direct REST API call (No client storage blocking issues)
+            // Direct REST API call (Bypasses all client storage / tracking prevention blocks)
             const response = await fetch(`${SUPABASE_URL}/rest/v1/visa_records1_new?id=eq.${recordId}&select=*`, {
                 headers: {
                     'apikey': SUPABASE_ANON_KEY,
@@ -301,39 +423,4 @@
             function formatDate(dateString) {
                 if (!dateString) return '';
                 let d = new Date(dateString);
-                if (isNaN(d)) return dateString;
-                return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).replace(/ /g, '-');
-            }
-
-            document.getElementById('v_ref').innerText = data.visa_reference_number || '';
-            document.getElementById('v_name').innerText = data.full_name || '';
-            document.getElementById('v_passport').innerText = data.passport_no || '';
-            document.getElementById('v_country').innerText = data.passport_country || '';
-            document.getElementById('v_category').innerText = data.visa_category || '';
-            document.getElementById('v_subcategory').innerText = data.visa_sub_category || '';
-            document.getElementById('v_apptype').innerText = data.application_type || '';
-            document.getElementById('v_facility').innerText = data.staying_facility || '';
-            document.getElementById('v_duration').innerText = data.duration || '';
-            document.getElementById('v_start').innerText = formatDate(data.start_date);
-            document.getElementById('v_end').innerText = formatDate(data.end_date);
-
-            if (data.photo && data.photo.trim() !== "") {
-                const photoUrl = `${SUPABASE_URL}/storage/v1/object/public/photo/${data.photo}`;
-                let photoEl = document.getElementById('v_photo');
-                photoEl.src = photoUrl;
-                photoEl.style.display = "block";
-            }
-
-        } catch (err) {
-            console.error('Error loading verification:', err);
-            alert('Error verifying visa details.');
-        } finally {
-            document.getElementById("loader").style.display = "none";
-        }
-    }
-
-    window.onload = loadVerificationDetails;
-</script>
-
-</body>
-</html>
+                if (isNaN(d)) retur
