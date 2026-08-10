@@ -8,7 +8,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
-    <!-- Local uploads1 folder files (چې شته دي) -->
+    <!-- Local uploads1 folder files -->
     <link rel="stylesheet" type="text/css" href="uploads1/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="uploads1/ionicons.css">
     <link rel="stylesheet" type="text/css" href="uploads1/shortcodes.css">        
@@ -19,9 +19,7 @@
     <link rel="stylesheet" type="text/css" href="uploads1/custom.css">
     <link rel="stylesheet" type="text/css" href="uploads1/primefaces.css">
     <link rel="stylesheet" type="text/css" href="uploads1/errormsg.css">
-    
-    <!-- Online CDN for FontAwesome (د 404 او فونټ تېروتنو د له منځه وړلو لپاره) -->
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="uploads1/font-awesome.min.css">
 
     <style type="text/css">
         body {
@@ -41,38 +39,6 @@
         @media (max-width: 991px) {
             .label-div { text-align: center; }
             .value-div { text-align: center; }
-            /* په موبايل کې د مینو د ښودلو لپاره سټایل */
-            .mainnav .menu {
-                display: none;
-                background: #fff;
-                position: absolute;
-                width: 100%;
-                left: 0;
-                top: 70px;
-                box-shadow: 0 5px 10px rgba(0,0,0,0.1);
-                padding: 15px 0;
-                z-index: 999;
-            }
-            .mainnav .menu.active {
-                display: block !important;
-            }
-            .mainnav .menu li {
-                display: block;
-                text-align: center;
-                padding: 10px 0;
-            }
-            .btn-menu {
-                display: block !important;
-                cursor: pointer;
-                font-size: 24px;
-                float: right;
-                margin-top: 20px;
-            }
-        }
-        @media (min-width: 992px) {
-            .btn-menu {
-                display: none !important;
-            }
         }
         /* Preloader Styles */
         .preloader {
@@ -144,6 +110,7 @@
     <div class="preloader" id="loader">
         <div class="loading-effect-2">
             <span></span>
+            
         </div>
     </div>
 	
@@ -159,10 +126,6 @@
                         </div>
                         <div class="col-md-8 col-xs-2">	
                             <div class="nav-wrap">
-                                <!-- د موبايل د مینو تڼۍ -->
-                                <div class="btn-menu" onclick="toggleMenu()">
-                                    <i class="fa fa-bars"></i>
-                                </div>
                                 <nav id="mainnav" class="mainnav">
                                     <ul class="menu">
                                         <li><a href="#" class="urduLang urduFont">Home</a></li>
@@ -208,7 +171,7 @@
 
                                         <div class="row" style="margin-top: 20px;">
                                             <div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div">
-                                                <span style="font-size: 24px; font-weight: bold;">Passport No</span>
+                                                <span style="font-size: 15px; font-weight: bold;">Passport No</span>
                                             </div>
                                             <div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div">
                                                 <p id="v_passport" style="font-size: 15px;"></p>
@@ -217,7 +180,7 @@
 
                                         <div class="row" style="margin-top: 20px;">
                                             <div class="col-md-5 ct-u-padding0 ct-u-margin0 label-div">
-                                                <span style="font-size: 24px; font-weight: bold;">Passport Country</span>
+                                                <span style="font-size: 15px; font-weight: bold;">Passport Country</span>
                                             </div>
                                             <div class="col-md-7 ct-u-padding0 ct-u-margin0 value-div">
                                                 <p id="v_country" style="font-size: 15px;"></p>
@@ -272,7 +235,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Visa Start Date & Visa End Date -->
+                                <!-- Visa Start Date & Visa End Date (مخکې راغلې) -->
                                 <div class="row" style="margin-top: 20px;">
                                     <div class="col-md-6">
                                         <div class="row" style="margin-top: 20px;">
@@ -297,7 +260,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Visa Duration -->
+                                <!-- Visa Duration (اخر ته راغله) -->
                                 <div class="row" style="margin-top: 20px;">
                                     <div class="col-md-6">
                                         <div class="row" style="margin-top: 20px;">
@@ -338,12 +301,6 @@
     </footer>
 
 <script>
-    // د موبايل مینو د پرانستلو او تړلو فنکشن
-    function toggleMenu() {
-        var menu = document.querySelector('.mainnav .menu');
-        menu.classList.toggle('active');
-    }
-
     const SUPABASE_URL = 'https://bwciadrnuxjowqgaflgu.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ3Y2lhZHJudXhqb3dxZ2FmbGd1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyNzc1NTUsImV4cCI6MjEwMTg1MzU1NX0.B4J7D4Iii5lpEE9NPI1t9BAdXzWaHmJY7touKd-usO4';
 
@@ -405,8 +362,29 @@
             document.getElementById('v_subcategory').innerText = data.visa_sub_category || '';
             document.getElementById('v_apptype').innerText = data.application_type || '';
             document.getElementById('v_facility').innerText = data.staying_facility || '';
+            
+            // د Supabase دقیق کالم نومونه دلته ولګول شول
             document.getElementById('v_duration').innerText = data.visa_duration || '';
             document.getElementById('v_start').innerText = formatDate(data.visa_start_date);
             document.getElementById('v_end').innerText = formatDate(data.visa_end_date);
 
-            if (data.
+            if (data.photo && data.photo.trim() !== "") {
+                const photoUrl = `${SUPABASE_URL}/storage/v1/object/public/photo/${data.photo}`;
+                let photoEl = document.getElementById('v_photo');
+                photoEl.src = photoUrl;
+                photoEl.style.display = "block";
+            }
+
+        } catch (err) {
+            document.getElementById("loader").style.display = "none";
+            alert('❌ جدي تخنیکي تېروتنه پیدا شوه: ' + err.message);
+        } finally {
+            document.getElementById("loader").style.display = "none";
+        }
+    }
+
+    window.onload = loadVerificationDetails;
+</script>
+
+</body>
+</html>
