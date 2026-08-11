@@ -107,29 +107,32 @@
             100% { transform: rotate(-360deg); }
         }
 
-        /* ✅ د موبایل مینو تڼۍ — اصلاح شوې */
+        /* ✅ د موبایل مینو تڼۍ — د نوي کوډ په څیر */
         .btn-menu {
             display: none;
             position: absolute;
-            right: 20px;
-            top: 18px; /* پورته ته نږدې شو */
-            width: 28px;
-            height: 20px;
+            right: 15px;
+            top: 10px;
+            width: 48px;
+            height: 48px;
             cursor: pointer;
             z-index: 9999;
+            background: none;
+            border: none;
+            padding: 0;
+            align-items: center;
+            justify-content: center;
         }
-        .btn-menu span {
-            display: block;
-            width: 100%;
-            height: 3px;
-            background: #1f6fa5;
-            margin: 4px 0;
-            border-radius: 2px;
+        
+        .btn-menu svg {
+            width: 28px;
+            height: 28px;
+            color: #0068ac;
         }
 
         /* ✅ د مینو سټایلونه — پر کلیک کولو به ښکاره شي */
         @media (max-width: 991px) {
-            .btn-menu { display: block; }
+            .btn-menu { display: flex; }
             
             .mainnav {
                 display: none;
@@ -164,10 +167,12 @@
                 color: #333;
                 text-decoration: none;
                 font-weight: 500;
+                text-transform: uppercase;
+                font-size: 14px;
             }
             .mainnav ul li a:hover {
                 background: #f8f9fa;
-                color: #1f6fa5;
+                color: #0068ac;
             }
         }
 
@@ -202,12 +207,12 @@
                         </div>
                         
                         <div class="col-md-8 col-xs-4">    
-                            <!-- ✅ د مینو تڼۍ -->
-                            <div class="btn-menu" id="mobileMenuBtn">
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                            </div>
+                            <!-- ✅ د مینو تڼۍ (SVG Style) -->
+                            <button type="button" class="btn-menu" id="mobileMenuBtn" aria-label="Menu">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                                </svg>
+                            </button>
                             
                             <div class="nav-wrap">
                                 <nav id="mainnav" class="mainnav">
@@ -341,7 +346,7 @@
 <!-- ✅ jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<!-- ✅ د مینو کوډ — اصلاح شوی -->
+<!-- ✅ د مینو کوډ -->
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const menuBtn = document.getElementById('mobileMenuBtn');
@@ -352,7 +357,6 @@ document.addEventListener('DOMContentLoaded', function () {
             e.preventDefault();
             e.stopPropagation();
             mainNav.classList.toggle('active');
-            // د "X" انیمیشن لیرې شو، تڼۍ به نارمل پاتې شي
         });
 
         // د مینو څخه بهر کلیک کولو سره مینو بندول
@@ -427,7 +431,7 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('v_start').innerText = formatDate(data.visa_start_date);
             document.getElementById('v_end').innerText = formatDate(data.visa_end_date);
 
-           if (data.photo && data.photo.trim() !== "") {
+            if (data.photo && data.photo.trim() !== "") {
                 const photoUrl = `${SUPABASE_URL}/storage/v1/object/public/photo/${data.photo}`;
                 let photoEl = document.getElementById('v_photo');
                 photoEl.src = photoUrl;
