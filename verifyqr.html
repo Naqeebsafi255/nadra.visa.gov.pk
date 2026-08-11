@@ -107,14 +107,14 @@
             100% { transform: rotate(-360deg); }
         }
 
-        /* ✅ د موبایل مینو تڼۍ — د نوي کوډ په څیر */
+        /* ✅ د موبایل مینو تڼۍ — اصلاح شوې */
         .btn-menu {
             display: none;
             position: absolute;
             right: 15px;
-            top: 10px;
-            width: 48px;
-            height: 48px;
+            top: 15px;
+            width: 40px;
+            height: 40px;
             cursor: pointer;
             z-index: 9999;
             background: none;
@@ -122,12 +122,14 @@
             padding: 0;
             align-items: center;
             justify-content: center;
+            outline: none;
         }
         
         .btn-menu svg {
-            width: 28px;
-            height: 28px;
+            width: 30px;
+            height: 30px;
             color: #0068ac;
+            display: block;
         }
 
         /* ✅ د مینو سټایلونه — پر کلیک کولو به ښکاره شي */
@@ -207,9 +209,9 @@
                         </div>
                         
                         <div class="col-md-8 col-xs-4">    
-                            <!-- ✅ د مینو تڼۍ (SVG Style) -->
+                            <!-- ✅ د مینو تڼۍ (اصلاح شوی SVG - یوازې ۳ خطونه) -->
                             <button type="button" class="btn-menu" id="mobileMenuBtn" aria-label="Menu">
-                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                                 </svg>
                             </button>
