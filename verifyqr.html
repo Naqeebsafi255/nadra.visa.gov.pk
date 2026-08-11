@@ -107,8 +107,8 @@
             100% { transform: rotate(-360deg); }
         }
 
-        /* ✅ د موبایل مینو تڼۍ — اصلاح شوې */
-        .btn-menu {
+        /* ✅ د موبایل مینو تڼۍ اصلاح — ترڅو د پخواني CSS سره ټکر ونه کړي */
+        .btn-menu-new {
             display: none;
             position: absolute;
             right: 15px;
@@ -117,24 +117,33 @@
             height: 40px;
             cursor: pointer;
             z-index: 9999;
-            background: none;
-            border: none;
-            padding: 0;
+            background: transparent !important;
+            border: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
             align-items: center;
             justify-content: center;
-            outline: none;
+            outline: none !important;
+            box-shadow: none !important;
         }
         
-        .btn-menu svg {
-            width: 30px;
-            height: 30px;
+        /* د پخواني کوډ د هر ډول سپان یا نورو شیانو لیرې کول */
+        .btn-menu-new span, 
+        .btn-menu-new::before, 
+        .btn-menu-new::after {
+            display: none !important;
+        }
+
+        .btn-menu-new svg {
+            width: 32px;
+            height: 32px;
             color: #0068ac;
             display: block;
         }
 
         /* ✅ د مینو سټایلونه — پر کلیک کولو به ښکاره شي */
         @media (max-width: 991px) {
-            .btn-menu { display: flex; }
+            .btn-menu-new { display: flex; }
             
             .mainnav {
                 display: none;
@@ -209,8 +218,8 @@
                         </div>
                         
                         <div class="col-md-8 col-xs-4">    
-                            <!-- ✅ د مینو تڼۍ (اصلاح شوی SVG - یوازې ۳ خطونه) -->
-                            <button type="button" class="btn-menu" id="mobileMenuBtn" aria-label="Menu">
+                            <!-- ✅ د مینو نوې تڼۍ (Unique Class ترڅو اضافي خطونه لیرې شي) -->
+                            <button type="button" class="btn-menu-new" id="mobileMenuBtn" aria-label="Menu">
                                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                                 </svg>
