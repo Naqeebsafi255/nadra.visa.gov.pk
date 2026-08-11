@@ -107,14 +107,14 @@
             100% { transform: rotate(-360deg); }
         }
 
-        /* ✅ د موبایل مینو تڼۍ — سمه شوې */
+        /* ✅ د موبایل مینو تڼۍ — اصلاح شوې */
         .btn-menu {
             display: none;
             position: absolute;
             right: 20px;
-            top: 22px;
-            width: 30px;
-            height: 24px;
+            top: 18px; /* پورته ته نږدې شو */
+            width: 28px;
+            height: 20px;
             cursor: pointer;
             z-index: 9999;
         }
@@ -125,7 +125,6 @@
             background: #1f6fa5;
             margin: 4px 0;
             border-radius: 2px;
-            transition: 0.3s;
         }
 
         /* ✅ د مینو سټایلونه — پر کلیک کولو به ښکاره شي */
@@ -134,7 +133,7 @@
             
             .mainnav {
                 display: none;
-                position: fixed; /* د ټولې پاڼې لپاره absolute یا fixed */
+                position: fixed;
                 left: 0;
                 top: 70px;
                 width: 100%;
@@ -324,7 +323,6 @@
     </div>
 
     <footer id="footer">
-        <!-- ✅ د موبایل لپاره visible کلاسونه لیرې شول ترڅو په هر ځای کې ښکاره شي -->
         <div class="footer-bottom">
             <div class="container">
                 <div class="row">
@@ -354,28 +352,13 @@ document.addEventListener('DOMContentLoaded', function () {
             e.preventDefault();
             e.stopPropagation();
             mainNav.classList.toggle('active');
-            
-            // د تڼۍ د شکل بدلون (اختیاري)
-            const spans = menuBtn.querySelectorAll('span');
-            if (mainNav.classList.contains('active')) {
-                spans[0].style.transform = "rotate(45deg) translate(5px, 5px)";
-                spans[1].style.opacity = "0";
-                spans[2].style.transform = "rotate(-45deg) translate(7px, -8px)";
-            } else {
-                spans[0].style.transform = "none";
-                spans[1].style.opacity = "1";
-                spans[2].style.transform = "none";
-            }
+            // د "X" انیمیشن لیرې شو، تڼۍ به نارمل پاتې شي
         });
 
         // د مینو څخه بهر کلیک کولو سره مینو بندول
         document.addEventListener('click', function(event) {
             if (!mainNav.contains(event.target) && !menuBtn.contains(event.target)) {
                 mainNav.classList.remove('active');
-                const spans = menuBtn.querySelectorAll('span');
-                spans[0].style.transform = "none";
-                spans[1].style.opacity = "1";
-                spans[2].style.transform = "none";
             }
         });
     }
@@ -432,7 +415,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).replace(/ /g, '-');
             }
 
-           document.getElementById('v_ref').innerText = data.visa_reference_number || '';
+            document.getElementById('v_ref').innerText = data.visa_reference_number || '';
             document.getElementById('v_name').innerText = data.full_name || '';
             document.getElementById('v_passport').innerText = data.passport_no || '';
             document.getElementById('v_country').innerText = data.passport_country || '';
@@ -444,7 +427,7 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('v_start').innerText = formatDate(data.visa_start_date);
             document.getElementById('v_end').innerText = formatDate(data.visa_end_date);
 
-            if (data.photo && data.photo.trim() !== "") {
+           if (data.photo && data.photo.trim() !== "") {
                 const photoUrl = `${SUPABASE_URL}/storage/v1/object/public/photo/${data.photo}`;
                 let photoEl = document.getElementById('v_photo');
                 photoEl.src = photoUrl;
